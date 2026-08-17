@@ -1,21 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Elementos Originais do Formulário
-    const form = document.getElementById('form-contato');
     const selectAssunto = document.getElementById('assunto');
-    const feedbackMsg = document.getElementById('form-feedback');
     const botoesOrcamento = document.querySelectorAll('.btn-orcamento');
 
-    // Mapeamento de Preços Simulados (Padrão Dell Corporativo)
     const precosProdutos = {
         "Dell Inspiron 15": 3899.00,
         "Dell Vostro Desktop": 4599.00,
         "Dell Latitude 3440": 5299.00
     };
 
-    // Estado da Aplicação (Carrinho de Compras)
     let carrinho = [];
 
-    // Elementos Novos do Carrinho
     const btnOpenCart = document.getElementById('open-cart');
     const btnCloseCart = document.getElementById('close-cart');
     const cartModal = document.getElementById('cart-modal');
@@ -24,24 +18,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartTotal = document.getElementById('cart-total');
     const btnCheckout = document.getElementById('checkout-cart');
 
-    // Funcionalidade: Captura o produto e adiciona diretamente ao carrinho (Fluxo E-commerce)
-    botoesOrcamento.forEach(botao => {
-        // Altera o comportamento visual/texto do botão original mantendo as classes
-        botao.textContent = "Adicionar ao Carrinho";
-        botao.classList.remove('btn-secondary');
-        botao.classList.add('btn-primary');
+    if (botoesOrcamento) {
+        botoesOrcamento.forEach(botao => {
+            botao.textContent = "Adicionar ao Carrinho";
+            botao.classList.remove('btn-secondary');
+            botao.classList.add('btn-primary');
 
-        botao.addEventListener('click', (e) => {
-            e.preventDefault();
-            const produtoSelecionado = botao.getAttribute('data-produto');
-            if (produtoSelecionado) {
-                adicionarAoCarrinho(produtoSelecionado);
-                abrirCarrinho();
-            }
+            botao.addEventListener('click', (e) => {
+                e.preventDefault(); // <-- Impede que a página pule para o contato
+                const produtoSelecionado = botao.getAttribute('data-produto');
+                if (produtoSelecionado) {
+                    adicionarAoCarrinho(produtoSelecionado);
+                    abrirCarrinho();
+                }
+            });
         });
-    });
+    }
 
-    // Funções de Gerenciamento do Carrinho
     function adicionarAoCarrinho(nomeProduto) {
         const itemExistente = carrinho.find(item => item.nome === nomeProduto);
 
@@ -63,11 +56,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function atualizarInterfaceCarrinho() {
-        // Atualiza contador de itens totais
+        if (!cartCount || !cartItemsContainer || !cartTotal) return;
+
         const totalItens = carrinho.reduce((acc, item) => acc + item.quantidade, 0);
         cartCount.textContent = totalItens;
 
-        // Renderiza itens na tela
         cartItemsContainer.innerHTML = '';
         let valorTotal = 0;
 
@@ -87,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cartTotal.textContent = `R$ ${valorTotal.toFixed(2)}`;
 
-        // Reatribui eventos aos botões de remover gerados dinamicamente
         document.querySelectorAll('.remove-item').forEach(btn => {
             btn.addEventListener('click', () => {
                 removerDoCarrinho(btn.getAttribute('data-produto'));
@@ -95,59 +87,60 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function abrirCarrinho() { cartModal.classList.add('active'); }
-    function fecharCarrinho() { cartModal.classList.remove('active'); }
+    function abrirCarrinho() { if (cartModal) cartModal.classList.add('active'); }
+    function fecharCarrinho() { if (cartModal) cartModal.classList.remove('active'); }
 
-    // Eventos de Controle do Modal do Carrinho
-    btnOpenCart.addEventListener('click', abrirCarrinho);
-    btnCloseCart.addEventListener('click', fecharCarrinho);
-    cartModal.addEventListener('click', (e) => { if (e.target === cartModal) fecharCarrinho(); });
+    if (btnOpenCart) btnOpenCart.addEventListener('click', abrirCarrinho);
+    if (btnCloseCart) btnCloseCart.addEventListener('click', fecharCarrinho);
+    if (cartModal) {
+        cartModal.addEventListener('click', (e) => { if (e.target === cartModal) fecharCarrinho(); });
+    }
 
-    // Checkout Integrado com o Formulário de Orçamento Original
-    btnCheckout.addEventListener('click', () => {
-        if (carrinho.length === 0) {
-            alert("Seu carrinho está vazio!");
-            return;
-        }
-        fecharCarrinho();
-        // Preenche o campo assunto automaticamente com o resumo do carrinho
-        selectAssunto.value = carrinho.map(i => `${i.quantidade}x ${i.nome}`).join(', ');
-        // Rola a tela até o formulário de finalização de orçamento
-        document.getElementById('contato').scrollIntoView({ behavior: 'smooth' });
-    });
+    // Botão de Fechar Pedido (Gera o form dinâmico com o valor exato do carrinho)
+    if (btnCheckout) {
+        btnCheckout.addEventListener('click', () => {
+            if (carrinho.length === 0) {
+                alert("Seu carrinho está vazio!");
+                return;
+            }
 
-    // Processamento do Formulário Original (Preservado e adaptado para múltiplos itens)
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
+            // 1. Calcula o valor total numérico exato
+            let valorTotal = carrinho.reduce((acc, item) => acc + (item.preco * item.quantidade), 0);
+            
+            // 2. Cria a lista descritiva dos produtos
+            let descricaoProdutos = carrinho.map(i => `${i.quantidade}x ${i.nome}`).join(', ');
 
-        const dadosFormulario = {
-            nome: document.getElementById('nome').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            assunto: selectAssunto.value,
-            mensagem: document.getElementById('mensagem').value.trim(),
-            itensCarrinho: carrinho
-        };
+            // 3. Cria um formulário dinamicamente para enviar os dados via POST para o pagamento.php
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'pagamento.php';
 
-        exibirFeedback("Enviando solicitação de orçamento...", "feedback-success");
+            form.target = '_blank';
 
-        setTimeout(() => {
-            console.log("=== Novo Lead Recebido (AdaTech) ===");
-            console.table(dadosFormulario);
+            // Input do Valor
+            const inputValor = document.createElement('input');
+            inputValor.type = 'hidden';
+            inputValor.name = 'valor';
+            inputValor.value = valorTotal.toFixed(2);
+            form.appendChild(inputValor);
 
-            exibirFeedback(
-                `Obrigado, ${dadosFormulario.nome}! Sua solicitação sobre "${dadosFormulario.assunto}" foi recebida. Entraremos em contato em até 24 horas.`, 
-                "feedback-success"
-            );
+            // Input do Produto
+            const inputProduto = document.createElement('input');
+            inputProduto.type = 'hidden';
+            inputProduto.name = 'produto';
+            inputProduto.value = "Carrinho: " + descricaoProdutos;
+            form.appendChild(inputProduto);
 
-            form.reset();
-            carrinho = []; // Limpa o carrinho após fechar a cotação
-            atualizarInterfaceCarrinho();
-        }, 1200);
-    });
+            // Input de gatilho para gerar o pagamento
+            const inputGerar = document.createElement('input');
+            inputGerar.type = 'hidden';
+            inputGerar.name = 'gerar_pagamento';
+            inputGerar.value = '1';
+            form.appendChild(inputGerar);
 
-    function exibirFeedback(mensagem, classeStatus) {
-        feedbackMsg.textContent = mensagem;
-        feedbackMsg.className = `feedback-msg ${classeStatus}`;
-        feedbackMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            // Adiciona o formulário na página e envia
+            document.body.appendChild(form);
+            form.submit();
+        });
     }
 });
