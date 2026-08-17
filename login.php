@@ -1,6 +1,10 @@
 <?php
+// Ativar exibição de erros para encontrarmos o problema
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
-include('conexao.php');
+include('conexao.php'); // <-- ESSA LINHA CONECTA AO BANCO DE DADOS
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
