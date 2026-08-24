@@ -10,7 +10,7 @@ session_start();
     <link rel="stylesheet" href="adatech.css">
 </head>
 <body>
-
+ 
     <header class="navbar">
         <div class="container nav-container">
             <a href="#" class="logo">Ada<span>Tech</span></a>
@@ -26,15 +26,15 @@ session_start();
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                     <span class="cart-count" id="cart-count">0</span>
                 </div>
-
+ 
                 <!-- Bloco do Usuário e Botão do Admin -->
                 <?php if(isset($_SESSION['usuario_nome'])): ?>
                     <span class="user-greeting">Olá, <?php echo $_SESSION['usuario_nome']; ?></span>
-
+ 
                     <?php if(isset($_SESSION['usuario_nivel']) && $_SESSION['usuario_nivel'] === 'admin'): ?>
                         <a href="painel.php" class="btn-chip btn-chip-blue">Painel Admin</a>
                     <?php endif; ?>
-
+ 
                     <a href="logout.php" class="btn-chip btn-chip-red">Sair</a>
                 <?php else: ?>
                     <a href="login.php" class="btn-chip btn-chip-ghost">Login</a>
@@ -43,7 +43,7 @@ session_start();
             </div>
         </div>
     </header>
-
+ 
     <!-- Modal do Carrinho -->
     <div class="cart-modal-overlay" id="cart-modal">
         <div class="cart-modal">
@@ -56,7 +56,7 @@ session_start();
             </div>
             <div class="cart-modal-footer">
                 <div class="cart-total">Total: <span id="cart-total">R$ 0,00</span></div>
-
+ 
                 <!-- Botão de Fechar Pedido integrado ao adatech.js -->
                 <button id="checkout-cart" class="btn-fechar-pedido">
                     Fechar Pedido
@@ -64,7 +64,7 @@ session_start();
             </div>
         </div>
     </div>
-
+ 
     <section id="home" class="hero">
         <div class="hero-bg">
             <img src="img/banner-hero.jpg" alt="AdaTech - Notebooks, Desktops e Infraestrutura de TI" class="hero-bg-img">
@@ -80,7 +80,7 @@ session_start();
             </div>
         </div>
     </section>
-
+ 
     <section id="produtos" class="section-padding">
         <div class="container">
             <span class="eyebrow">Nossa linha</span>
@@ -108,7 +108,7 @@ session_start();
             </div>
         </div>
     </section>
-
+ 
     <section id="servicos" class="section-bg section-padding">
         <div class="container">
             <span class="eyebrow">O que fazemos</span>
@@ -133,13 +133,13 @@ session_start();
             </div>
         </div>
     </section>
-
+ 
     <section id="contato" class="section-padding">
         <div class="container form-container">
             <span class="eyebrow">Vamos conversar</span>
             <h2 class="section-title">Solicite um Orçamento</h2>
             <p class="form-subtitle">Preencha os campos abaixo. Nossa equipe técnica retornará o contato o mais breve possível.</p>
-
+ 
             <form id="form-contato" class="card" action="salvar_orcamento.php" method="POST">
                 <div class="form-group">
                     <label for="nome">Nome Completo *</label>
@@ -170,13 +170,13 @@ session_start();
             <div id="form-feedback" class="feedback-msg hidden"></div>
         </div>
     </section>
-
+ 
     <footer class="footer">
         <div class="container footer-content">
             <p>&copy; 2026 AdaTech - Soluções em TI. Projeto Integrador | Técnico em Informática Senac.</p>
         </div>
     </footer>
-
+ 
     <script src="adatech.js"></script>
 </body>
 </html>
