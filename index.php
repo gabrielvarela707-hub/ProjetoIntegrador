@@ -14,31 +14,31 @@ session_start();
     <header class="navbar">
         <div class="container nav-container">
             <a href="#" class="logo">Ada<span>Tech</span></a>
-            <nav style="display: flex; gap: 20px; align-items: center;">
-                <a href="index.php" style="text-decoration: none; color: #334155;">Home</a>
-                <a href="#produtos" style="text-decoration: none; color: #334155;">Produtos</a>
-                <a href="#servicos" style="text-decoration: none; color: #334155;">Serviços</a>
-                <a href="contato.php" style="text-decoration: none; color: #0284c7; font-weight: bold;">Fale Conosco</a>
+            <nav class="main-nav">
+                <a href="index.php">Home</a>
+                <a href="#produtos">Produtos</a>
+                <a href="#servicos">Serviços</a>
+                <a href="contato.php" class="nav-cta">Fale Conosco</a>
             </nav>
-            <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="nav-actions">
                 <!-- Ícone do Carrinho -->
-                <div class="cart-icon-container" id="open-cart" style="cursor: pointer; position: relative;">
+                <div class="cart-icon-container" id="open-cart">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                     <span class="cart-count" id="cart-count">0</span>
                 </div>
 
                 <!-- Bloco do Usuário e Botão do Admin -->
                 <?php if(isset($_SESSION['usuario_nome'])): ?>
-                    <span style="color: #333; font-weight: bold; font-size: 14px;">Olá, <?php echo $_SESSION['usuario_nome']; ?></span>
-                    
+                    <span class="user-greeting">Olá, <?php echo $_SESSION['usuario_nome']; ?></span>
+
                     <?php if(isset($_SESSION['usuario_nivel']) && $_SESSION['usuario_nivel'] === 'admin'): ?>
-                        <a href="painel.php" style="padding: 6px 12px; background: #0284c7; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 13px;">Painel Admin</a>
+                        <a href="painel.php" class="btn-chip btn-chip-blue">Painel Admin</a>
                     <?php endif; ?>
 
-                    <a href="logout.php" style="padding: 6px 12px; background: #ef4444; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 13px;">Sair</a>
+                    <a href="logout.php" class="btn-chip btn-chip-red">Sair</a>
                 <?php else: ?>
-                    <a href="login.php" style="padding: 6px 12px; color: #0284c7; text-decoration: none; font-weight: bold; font-size: 14px;">Login</a>
-                    <a href="cadastro.php" style="padding: 6px 12px; background: #0284c7; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 13px;">Cadastrar</a>
+                    <a href="login.php" class="btn-chip btn-chip-ghost">Login</a>
+                    <a href="cadastro.php" class="btn-chip btn-chip-blue">Cadastrar</a>
                 <?php endif; ?>
             </div>
         </div>
@@ -56,9 +56,9 @@ session_start();
             </div>
             <div class="cart-modal-footer">
                 <div class="cart-total">Total: <span id="cart-total">R$ 0,00</span></div>
-                
+
                 <!-- Botão de Fechar Pedido integrado ao adatech.js -->
-                <button id="checkout-cart" class="btn-fechar-pedido" style="width: 100%; background: #008b8b; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px;">
+                <button id="checkout-cart" class="btn-fechar-pedido">
                     Fechar Pedido
                 </button>
             </div>
@@ -66,21 +66,31 @@ session_start();
     </div>
 
     <section id="home" class="hero">
+        <div class="hero-bg">
+            <img src="img/banner-hero.jpg" alt="AdaTech - Notebooks, Desktops e Infraestrutura de TI" class="hero-bg-img">
+            <div class="hero-overlay"></div>
+        </div>
         <div class="container hero-content">
-            <h1>Tecnologia e Suporte de Alta Performance</h1>
+            <span class="hero-tag">Revenda Autorizada Dell</span>
+            <h1>Tecnologia e Suporte de <span class="text-gradient">Alta Performance</span></h1>
             <p>Venda autorizada de notebooks Dell, desktops corporativos e soluções completas de infraestrutura e suporte em TI para o seu negócio.</p>
-            <a href="#produtos" class="btn-primary">Ver Catálogo</a>
+            <div class="hero-buttons">
+                <a href="#produtos" class="btn-primary">Ver Catálogo</a>
+                <a href="#contato" class="btn-outline">Solicitar Orçamento</a>
+            </div>
         </div>
     </section>
 
     <section id="produtos" class="section-padding">
         <div class="container">
+            <span class="eyebrow">Nossa linha</span>
             <h2 class="section-title">Nossos Produtos</h2>
+            <p class="section-subtitle">Equipamentos originais Dell com garantia, prontos para elevar a produtividade da sua empresa.</p>
             <div class="grid-layout">
                 <div class="card product-card">
                     <div class="product-badge">Dell</div>
                     <h3>Notebook Dell Inspiron 16</h3>
-                    <p>Processador Intel Core i5, 8GB RAM, SSD 512GB. Perfeito para produtividade diária e estudos.</p>
+                    <p>Processador Intel Core i7, 8GB RAM, SSD 512GB. Perfeito para produtividade diária e estudos.</p>
                     <a href="#contato" class="btn-secondary btn-orcamento" data-produto="Dell Inspiron 15">Solicitar Orçamento</a>
                 </div>
                 <div class="card product-card">
@@ -101,17 +111,22 @@ session_start();
 
     <section id="servicos" class="section-bg section-padding">
         <div class="container">
+            <span class="eyebrow">O que fazemos</span>
             <h2 class="section-title">Serviços de Suporte em TI</h2>
+            <p class="section-subtitle">Do hardware à rede, cuidamos de cada detalhe para sua operação nunca parar.</p>
             <div class="grid-layout">
                 <div class="card service-card">
+                    <div class="service-icon">🛠️</div>
                     <h3>Manutenção de Hardware</h3>
                     <p>Diagnóstico preciso, substituição de componentes danificados, limpeza interna e upgrades de armazenamento (SSD) e memória RAM.</p>
                 </div>
                 <div class="card service-card">
+                    <div class="service-icon">💾</div>
                     <h3>Formatação e Otimização</h3>
                     <p>Instalação limpa de sistemas operacionais (Windows/Linux), backup seguro de dados, aplicação de drivers oficiais e remoção de malwares.</p>
                 </div>
                 <div class="card service-card">
+                    <div class="service-icon">🌐</div>
                     <h3>Suporte Técnico Local e Remoto</h3>
                     <p>Atendimento ágil para resolução de falhas de conectividade, configuração de redes locais, impressoras e suporte ao usuário final.</p>
                 </div>
@@ -121,9 +136,10 @@ session_start();
 
     <section id="contato" class="section-padding">
         <div class="container form-container">
+            <span class="eyebrow">Vamos conversar</span>
             <h2 class="section-title">Solicite um Orçamento</h2>
             <p class="form-subtitle">Preencha os campos abaixo. Nossa equipe técnica retornará o contato o mais breve possível.</p>
-            
+
             <form id="form-contato" class="card" action="salvar_orcamento.php" method="POST">
                 <div class="form-group">
                     <label for="nome">Nome Completo *</label>
