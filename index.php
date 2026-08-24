@@ -7,7 +7,7 @@ session_start();
 |--------------------------------------------------------------------------
 */
 
-$heroImage = 'img/Gemini_Generated_Image_o0vq11o0vq11o0vq.jpg';
+$heroImage = 'banner-hero.jpg';
 
 /*
  * Verifica se a imagem realmente existe no servidor.
