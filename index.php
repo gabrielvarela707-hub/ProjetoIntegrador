@@ -79,7 +79,7 @@ session_start();
             <div class="grid-layout">
                 <div class="card product-card">
                     <div class="product-badge">Dell</div>
-                    <h3>Notebook Dell Inspiron 15</h3>
+                    <h3>Notebook Dell Inspiron 16</h3>
                     <p>Processador Intel Core i5, 8GB RAM, SSD 512GB. Perfeito para produtividade diária e estudos.</p>
                     <a href="#contato" class="btn-secondary btn-orcamento" data-produto="Dell Inspiron 15">Solicitar Orçamento</a>
                 </div>
