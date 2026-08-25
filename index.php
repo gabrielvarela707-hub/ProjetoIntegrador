@@ -7,7 +7,7 @@ session_start();
 |--------------------------------------------------------------------------
 */
 
-$heroImage = 'banner-hero.jpg';
+$heroImage = '<banner-hero class=""></banner-hero>jpg';
 
 /*
  * Verifica se a imagem realmente existe no servidor.
