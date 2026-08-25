@@ -39,15 +39,6 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
 
     <style>
 
-        /* IMAGENS DOS PRODUTOS */
-        .product-image {
-            width: 100%;
-            height: 220px;
-            object-fit: contain;
-            display: block;
-            margin: 0 0 20px 0;
-        }
-
         .hero {
             position: relative !important;
             overflow: hidden !important;
@@ -499,8 +490,6 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
 
                 <div class="card product-card">
 
-                    <img src="L1_dell-inspiron-16-plus-7640-cn76604sc.webp" alt="Notebook Dell Inspiron 16" class="product-image">
-
                     <div class="product-badge">
                         Dell
                     </div>
@@ -538,8 +527,6 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
 
                 <div class="card product-card">
 
-                    <img src="dv3020sff-csy-00030rf-gn-noodd-nomcr.jpg" alt="Dell Vostro Desktop" class="product-image">
-
                     <div class="product-badge">
                         Dell
                     </div>
@@ -576,8 +563,6 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
                 =================================================== -->
 
                 <div class="card product-card">
-
-                    <img src="latitude-14-3440-laptop-pdp-module-06.jpg" alt="Notebook Dell Latitude 3440" class="product-image">
 
                     <div class="product-badge">
                         Dell
@@ -948,4 +933,3 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
 </body>
 
 </html>
-
