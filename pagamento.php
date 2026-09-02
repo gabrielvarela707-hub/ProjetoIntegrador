@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gerar_pagamento'])) {
     "success" => "http://44.204.214.121/index.php",
     "failure" => "http://44.204.214.121/index.php",
     "pending" => "http://44.204.214.121/index.php"
-]
+
         ]
     ];
 
