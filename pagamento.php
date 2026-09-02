@@ -1,85 +1,197 @@
 <?php
-include('conexao.php');
+session_start();
 
-$access_token = getenv('APP_USR-1354507277436164-080615-d1f8e0bd13d944ab3e0369936d7ed627-3596816680'); 
-// Pega o valor e o nome do produto enviados pelo carrinho (se não vier nada, assume os valores padrão)
-$valor = isset($_POST['valor']) ? floatval(str_replace(',', '.', $_POST['valor'])) : 3899.00;
-$produto = isset($_POST['produto']) ? $_POST['produto'] : "Carrinho Ada Tech";
+$valor = isset($_POST['valor']) ? (float) str_replace(',', '.', $_POST['valor']) : 0.00;
+$produto = isset($_POST['produto']) ? trim($_POST['produto']) : 'Carrinho AdaTech';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gerar_pagamento'])) {
-    $preferenceData = [
-        "items" => [
-            [
-                "title" => $produto,
-                "quantity" => 1,
-                "unit_price" => $valor
-            ]
-        ],
-"back_urls" => [
-    "success" => "http://44.204.214.121/index.php",
-    "failure" => "http://44.204.214.121/index.php",
-    "pending" => "http://44.204.214.121/index.php"
-
-        ]
-    ];
-
-    $ch = curl_init('https://api.mercadopago.com/checkout/preferences');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        "Authorization: Bearer " . trim($access_token),
-        "Content-Type: application/json",
-        "Accept: application/json"
-    ]);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($preferenceData));
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-
-$response = curl_exec($ch);
-    
-    if (curl_errno($ch)) {
-        $erro = 'Erro cURL: ' . curl_error($ch);
-    } else {
-        $data = json_decode($response, true);
-        
-        // Verifica se o init_point veio dentro da resposta da API
-        if (isset($data['init_point']) && !empty($data['init_point'])) {
-            header("Location: " . $data['init_point']);
-            exit;
-        } else {
-            $erro = "Erro ao gerar preferência. Resposta: " . htmlspecialchars($response);
-        }
-    }
-    curl_close($ch);
+if ($valor <= 0) {
+    $valor = 0.00;
 }
+
+// Código apenas demonstrativo para o Projeto Integrador.
+// Não representa uma cobrança PIX real.
+$pedidoId = strtoupper(substr(hash('sha256', $produto . '|' . $valor . '|' . microtime(true)), 0, 12));
+$pixDemo = 'ADATECH-DEMO|' . $pedidoId . '|R$' . number_format($valor, 2, '.', '') . '|' . $produto;
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Pagamento - AdaTech</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento PIX - AdaTech</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0f172a;
+            color: #1e293b;
+        }
+        .card {
+            width: 100%;
+            max-width: 520px;
+            background: #fff;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 20px 50px rgba(0,0,0,.28);
+        }
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: #e0f2fe;
+            color: #0369a1;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+        h1 {
+            margin: 0 0 8px;
+            color: #0f172a;
+            font-size: 28px;
+        }
+        .sub {
+            margin: 0 0 24px;
+            color: #64748b;
+            font-size: 14px;
+        }
+        .resumo {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .resumo p { margin: 6px 0; }
+        .valor {
+            color: #008b8b;
+            font-weight: 800;
+            font-size: 24px;
+        }
+        #qrcode {
+            width: 220px;
+            min-height: 220px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px;
+            background: #fff;
+        }
+        .copy-row {
+            display: flex;
+            gap: 8px;
+            margin: 16px 0;
+        }
+        .copy-row input {
+            flex: 1;
+            min-width: 0;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: #334155;
+        }
+        button, .btn-link {
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+        .btn-copy { background: #0284c7; color: #fff; }
+        .btn-confirm {
+            width: 100%;
+            background: #008b8b;
+            color: #fff;
+            font-size: 16px;
+            margin-top: 8px;
+        }
+        .btn-back {
+            display: block;
+            margin-top: 12px;
+            color: #64748b;
+            background: transparent;
+        }
+        .notice {
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #fff7ed;
+            color: #9a3412;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        @media (max-width: 560px) {
+            .card { padding: 22px; }
+            .copy-row { flex-direction: column; }
+            #qrcode { width: 190px; min-height: 190px; }
+        }
+    </style>
 </head>
-<body style="background: #0f172a; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif;">
-    <div style="background: white; color: #333; padding: 30px; border-radius: 8px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-        <h2 style="color: #008b8b; margin-bottom: 20px;">Finalizar Pedido</h2>
-        
-        <?php if (isset($erro)): ?>
-            <p style="color: red; font-size: 14px; margin-bottom: 15px;"><?php echo $erro; ?></p>
-        <?php endif; ?>
+<body>
+    <main class="card">
+        <span class="badge">PIX • DEMONSTRAÇÃO</span>
+        <h1>Finalizar pedido</h1>
+        <p class="sub">Fluxo de pagamento simulado para apresentação do Projeto Integrador.</p>
 
-        <form method="POST">
-            <p style="font-size: 18px; font-weight: bold; margin-bottom: 5px;"><?php echo htmlspecialchars($produto); ?></p>
-            <p style="font-size: 20px; font-weight: bold; color: #008b8b; margin-bottom: 20px;">Total: R$ <?php echo number_format($valor, 2, ',', '.'); ?></p>
-            
-            <input type="hidden" name="valor" value="<?php echo $valor; ?>">
-            <input type="hidden" name="produto" value="<?php echo htmlspecialchars($produto); ?>">
-            <input type="hidden" name="gerar_pagamento" value="1">
+        <section class="resumo">
+            <p><strong>Pedido:</strong> <?php echo htmlspecialchars($produto, ENT_QUOTES, 'UTF-8'); ?></p>
+            <p><strong>ID:</strong> <?php echo htmlspecialchars($pedidoId, ENT_QUOTES, 'UTF-8'); ?></p>
+            <p class="valor">R$ <?php echo number_format($valor, 2, ',', '.'); ?></p>
+        </section>
 
-            <button type="submit" style="background: #008b8b; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px;">Pagar com Mercado Pago</button>
+        <div id="qrcode" aria-label="QR Code de demonstração"></div>
+
+        <div class="copy-row">
+            <input id="pix-code" type="text" readonly value="<?php echo htmlspecialchars($pixDemo, ENT_QUOTES, 'UTF-8'); ?>">
+            <button type="button" class="btn-copy" onclick="copiarPix()">Copiar código</button>
+        </div>
+
+        <form method="POST" action="pagamento_sucesso.php">
+            <input type="hidden" name="pedido_id" value="<?php echo htmlspecialchars($pedidoId, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="produto" value="<?php echo htmlspecialchars($produto, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="valor" value="<?php echo number_format($valor, 2, '.', ''); ?>">
+            <button type="submit" class="btn-confirm">Confirmar pagamento de teste</button>
         </form>
 
-        <a href="index.php" style="display: block; margin-top: 15px; color: #64748b; text-decoration: none; font-size: 14px;">← Voltar para o site AdaTech</a>
-    </div>
+        <a class="btn-link btn-back" href="index.php">← Voltar para o site AdaTech</a>
+
+        <div class="notice">
+            Este PIX é apenas uma simulação. Nenhuma cobrança real é criada e nenhum dinheiro é movimentado.
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        const codigoPix = <?php echo json_encode($pixDemo, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
+
+        new QRCode(document.getElementById('qrcode'), {
+            text: codigoPix,
+            width: 200,
+            height: 200
+        });
+
+        function copiarPix() {
+            const input = document.getElementById('pix-code');
+            input.select();
+            input.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(input.value).then(() => {
+                alert('Código PIX de demonstração copiado!');
+            }).catch(() => {
+                document.execCommand('copy');
+                alert('Código PIX de demonstração copiado!');
+            });
+        }
+    </script>
 </body>
 </html>
