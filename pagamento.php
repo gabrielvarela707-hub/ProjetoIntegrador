@@ -1,7 +1,7 @@
 <?php
 include('conexao.php');
 
-$access_token = "APP_USR-1354507277436164-080615-d1f8e0bd13d944ab3e0369936d7ed627-3596816680"; 
+$access_token = getenv('APP_USR-1354507277436164-080615-d1f8e0bd13d944ab3e0369936d7ed627-3596816680'); 
 // Pega o valor e o nome do produto enviados pelo carrinho (se não vier nada, assume os valores padrão)
 $valor = isset($_POST['valor']) ? floatval(str_replace(',', '.', $_POST['valor'])) : 3899.00;
 $produto = isset($_POST['produto']) ? $_POST['produto'] : "Carrinho Ada Tech";
