@@ -39,15 +39,6 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
 
     <style>
 
-        /* IMAGENS DOS PRODUTOS */
-        .product-image {
-            width: 100%;
-            height: 220px;
-            object-fit: contain;
-            display: block;
-            margin: 0 0 20px 0;
-        }
-
         .hero {
             position: relative !important;
             overflow: hidden !important;
@@ -165,8 +156,8 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
                     Home
                 </a>
 
-                <a href="#produtos">
-                    Produtos
+                <a href="#clientes">
+                    Clientes
                 </a>
 
                 <a href="#servicos">
@@ -181,53 +172,6 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
 
 
             <div class="nav-actions">
-
-
-                <!-- CARRINHO -->
-
-                <div
-                    class="cart-icon-container"
-                    id="open-cart"
-                >
-
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-
-                        <circle
-                            cx="9"
-                            cy="21"
-                            r="1"
-                        ></circle>
-
-                        <circle
-                            cx="20"
-                            cy="21"
-                            r="1"
-                        ></circle>
-
-                        <path
-                            d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
-                        ></path>
-
-                    </svg>
-
-                    <span
-                        class="cart-count"
-                        id="cart-count"
-                    >
-                        0
-                    </span>
-
-                </div>
 
 
                 <!-- ==================================================
@@ -294,70 +238,6 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
         </div>
 
     </header>
-
-
-
-    <!-- ==========================================================
-         MODAL DO CARRINHO
-    =========================================================== -->
-
-    <div
-        class="cart-modal-overlay"
-        id="cart-modal"
-    >
-
-        <div class="cart-modal">
-
-
-            <div class="cart-modal-header">
-
-                <h2>
-                    Seu Carrinho
-                </h2>
-
-                <button
-                    class="close-cart"
-                    id="close-cart"
-                >
-                    &times;
-                </button>
-
-            </div>
-
-
-            <div
-                class="cart-items"
-                id="cart-items"
-            >
-                <!-- Itens serão inseridos pelo JavaScript -->
-            </div>
-
-
-            <div class="cart-modal-footer">
-
-                <div class="cart-total">
-
-                    Total:
-
-                    <span id="cart-total">
-                        R$ 0,00
-                    </span>
-
-                </div>
-
-
-                <button
-                    id="checkout-cart"
-                    class="btn-fechar-pedido"
-                >
-                    Fechar Pedido
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
 
 
 
@@ -438,10 +318,10 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
             <div class="hero-buttons">
 
                 <a
-                    href="#produtos"
+                    href="#clientes"
                     class="btn-primary"
                 >
-                    Ver Catálogo
+                    Nossos Clientes
                 </a>
 
 
@@ -461,11 +341,11 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
 
 
     <!-- ==========================================================
-         PRODUTOS
+         CLIENTES
     =========================================================== -->
 
     <section
-        id="produtos"
+        id="clientes"
         class="section-padding"
     >
 
@@ -473,19 +353,19 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
 
 
             <span class="eyebrow">
-                Nossa linha
+                Quem confia na gente
             </span>
 
 
             <h2 class="section-title">
-                Nossos Produtos
+                Nossos Clientes
             </h2>
 
 
             <p class="section-subtitle">
 
-                Equipamentos originais Dell com garantia,
-                prontos para elevar a produtividade da sua empresa.
+                Empresas que já contam com a AdaTech para
+                manter a operação de TI funcionando sem parar.
 
             </p>
 
@@ -494,118 +374,81 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
 
 
                 <!-- ==================================================
-                     PRODUTO 1
+                     CLIENTE 1
                 =================================================== -->
 
-                <div class="card product-card">
+                <div class="card client-card">
 
-                    <img src="L1_dell-inspiron-16-plus-7640-cn76604sc.webp" alt="Notebook Dell Inspiron 16" class="product-image">
-
-                    <div class="product-badge">
-                        Dell
+                    <div class="client-badge">
+                        Cliente
                     </div>
 
 
                     <h3>
-                        Notebook Dell Inspiron 16
+                        Nome do Cliente
                     </h3>
 
 
                     <p>
 
-                        Processador Intel Core i7,
-                        8GB RAM, SSD 512GB.
-                        Perfeito para produtividade diária e estudos.
+                        "Depoimento do cliente sobre o serviço
+                        prestado pela AdaTech."
 
                     </p>
-
-
-                    <a
-                        href="#contato"
-                        class="btn-secondary btn-orcamento"
-                        data-produto="Dell Inspiron 16"
-                    >
-                        Solicitar Orçamento
-                    </a>
 
                 </div>
 
 
 
                 <!-- ==================================================
-                     PRODUTO 2
+                     CLIENTE 2
                 =================================================== -->
 
-                <div class="card product-card">
+                <div class="card client-card">
 
-                    <img src="dv3020sff-csy-00030rf-gn-noodd-nomcr.jpg" alt="Dell Vostro Desktop" class="product-image">
-
-                    <div class="product-badge">
-                        Dell
+                    <div class="client-badge">
+                        Cliente
                     </div>
 
 
                     <h3>
-                        Dell Vostro Desktop
+                        Nome do Cliente
                     </h3>
 
 
                     <p>
 
-                        Processador Intel Core i7,
-                        16GB RAM, SSD 512GB.
-                        Desempenho robusto e segurança para sua empresa.
+                        "Depoimento do cliente sobre o serviço
+                        prestado pela AdaTech."
 
                     </p>
-
-
-                    <a
-                        href="#contato"
-                        class="btn-secondary btn-orcamento"
-                        data-produto="Dell Vostro Desktop"
-                    >
-                        Solicitar Orçamento
-                    </a>
 
                 </div>
 
 
 
                 <!-- ==================================================
-                     PRODUTO 3
+                     CLIENTE 3
                 =================================================== -->
 
-                <div class="card product-card">
+                <div class="card client-card">
 
-                    <img src="latitude-14-3440-laptop-pdp-module-06.jpg" alt="Notebook Dell Latitude 3440" class="product-image">
-
-                    <div class="product-badge">
-                        Dell
+                    <div class="client-badge">
+                        Cliente
                     </div>
 
 
                     <h3>
-                        Notebook Dell Latitude 3440
+                        Nome do Cliente
                     </h3>
 
 
                     <p>
 
-                        Processador Intel Core i5,
-                        16GB RAM, SSD 256GB.
-                        Mobilidade e segurança avançada
-                        para o ambiente corporativo.
+                        "Depoimento do cliente sobre o serviço
+                        prestado pela AdaTech."
 
                     </p>
-
-
-                    <a
-                        href="#contato"
-                        class="btn-secondary btn-orcamento"
-                        data-produto="Dell Latitude 3440"
-                    >
-                        Solicitar Orçamento
-                    </a>
 
                 </div>
 
