@@ -38,41 +38,88 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Login - AdaTech</title>
     <link rel="stylesheet" href="adatech.css">
 </head>
-<body style="display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #0f172a; margin: 0; font-family: sans-serif;">
+<body>
 
-    <div style="background: #ffffff; padding: 30px; border-radius: 8px; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
-        <h2 style="margin-top: 0; color: #0f172a; text-align: center;">Acessar AdaTech</h2>
-        
-        <?php if(isset($_GET['msg']) && $_GET['msg'] == 'sucesso'): ?>
-            <p style="color: green; text-align: center;">Conta criada com sucesso! Faça login abaixo.</p>
-        <?php endif; ?>
+    <div class="auth-wrapper">
 
-        <?php if(isset($_GET['msg']) && $_GET['msg'] == 'senha_alterada'): ?>
-            <p style="color: green; text-align: center;">Senha redefinida com sucesso! Faça login abaixo.</p>
-        <?php endif; ?>
+        <!-- ==================================================
+             PAINEL DE MARCA
+        =================================================== -->
+        <div class="auth-brand-panel">
 
-        <?php if(isset($erro)): ?>
-            <p style="color: red; text-align: center;"><?php echo $erro; ?></p>
-        <?php endif; ?>
+            <div class="hero-orb hero-orb-1"></div>
+            <div class="hero-orb hero-orb-2"></div>
 
-        <form method="POST" action="login.php" style="display: flex; flex-direction: column; gap: 15px;">
-            <div>
-                <label style="display: block; margin-bottom: 5px; color: #333;">E-mail</label>
-                <input type="email" name="email" placeholder="Seu E-mail" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            <a href="index.php" class="auth-brand-logo">
+                Ada<span>Tech</span>
+            </a>
+
+            <h1>Tecnologia e suporte de TI que não deixa sua empresa parar.</h1>
+
+            <p>
+                Acesse sua conta para acompanhar orçamentos,
+                falar com nosso time e acompanhar o atendimento.
+            </p>
+
+            <ul class="auth-brand-list">
+                <li>Suporte técnico especializado</li>
+                <li>Revenda autorizada Dell</li>
+                <li>Atendimento rápido e humano</li>
+            </ul>
+
+        </div>
+
+        <!-- ==================================================
+             FORMULÁRIO DE LOGIN
+        =================================================== -->
+        <div class="auth-form-panel">
+
+            <div class="auth-card">
+
+                <a href="index.php" class="auth-back-link">&larr; Voltar ao site</a>
+
+                <h2>Acessar conta</h2>
+                <p class="auth-subtitle">Entre com seus dados para continuar.</p>
+
+                <?php if(isset($_GET['msg']) && $_GET['msg'] == 'sucesso'): ?>
+                    <div class="auth-msg auth-msg-success">Conta criada com sucesso! Faça login abaixo.</div>
+                <?php endif; ?>
+
+                <?php if(isset($_GET['msg']) && $_GET['msg'] == 'senha_alterada'): ?>
+                    <div class="auth-msg auth-msg-success">Senha redefinida com sucesso! Faça login abaixo.</div>
+                <?php endif; ?>
+
+                <?php if(isset($erro)): ?>
+                    <div class="auth-msg auth-msg-error"><?php echo $erro; ?></div>
+                <?php endif; ?>
+
+                <form method="POST" action="login.php" class="auth-form">
+
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" name="email" placeholder="voce@empresa.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Senha</label>
+                        <input type="password" name="senha" placeholder="Sua senha" required>
+                        <div class="form-forgot">
+                            <a href="esqueci_senha.php">Esqueceu a senha?</a>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="auth-submit-btn">Entrar</button>
+
+                </form>
+
+                <p class="auth-switch">
+                    Não tem uma conta? <a href="cadastro.php">Cadastre-se</a>
+                </p>
+
             </div>
-            <div>
-                <label style="display: block; margin-bottom: 5px; color: #333;">Senha</label>
-                <input type="password" name="senha" placeholder="Sua Senha" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-                <div style="text-align: right; margin-top: 5px;">
-                    <a href="esqueci_senha.php" style="color: #0284c7; font-size: 13px; text-decoration: none;">Esqueceu a senha?</a>
-                </div>
-            </div>
-            <button type="submit" style="background: #0284c7; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Entrar</button>
-        </form>
 
-        <p style="text-align: center; margin-top: 15px; font-size: 14px;">
-            Não tem uma conta? <a href="cadastro.php" style="color: #0284c7;">Cadastre-se</a>
-        </p>
+        </div>
+
     </div>
 
 </body>
