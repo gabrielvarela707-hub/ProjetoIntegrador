@@ -23,7 +23,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <!-- Menu Centralizado -->
     <nav style="display: flex; gap: 25px; align-items: center; position: absolute; left: 50%; transform: translateX(-50%);">
         <a href="index.php" style="text-decoration: none; color: #334155; font-weight: 500;">Home</a>
-        <a href="index.php#produtos" style="text-decoration: none; color: #334155; font-weight: 500;">Produtos</a>
+        <a href="index.php#clientes" style="text-decoration: none; color: #334155; font-weight: 500;">Clientes</a>
         <a href="index.php#servicos" style="text-decoration: none; color: #334155; font-weight: 500;">Serviços</a>
         <a href="contato.php" style="text-decoration: none; color: #0284c7; font-weight: bold;">Fale Conosco</a>
     </nav>
