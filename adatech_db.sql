@@ -24,6 +24,29 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `avaliacoes`
+--
+
+CREATE TABLE `avaliacoes` (
+  `id` int(11) NOT NULL,
+  `nome` varchar(100) NOT NULL,
+  `nota` tinyint(1) NOT NULL,
+  `comentario` text DEFAULT NULL,
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `avaliacoes`
+--
+
+INSERT INTO `avaliacoes` (`id`, `nome`, `nota`, `comentario`, `criado_em`) VALUES
+(1, 'Carlos Mendes', 5, 'Atendimento rápido e muito profissional. Resolveram nosso problema de rede no mesmo dia.', '2026-08-20 14:12:00'),
+(2, 'Marina Souza', 5, 'Equipe atenciosa e preços justos. Recomendo para qualquer empresa que precise de suporte em TI.', '2026-08-22 09:40:00'),
+(3, 'Rafael Lima', 4, 'Bom serviço, só demorou um pouco mais do que o combinado, mas o resultado valeu a pena.', '2026-08-25 17:05:00');
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `contatos`
 --
 
@@ -109,6 +132,12 @@ INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `token_recuperacao`, `to
 --
 
 --
+-- Índices de tabela `avaliacoes`
+--
+ALTER TABLE `avaliacoes`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Índices de tabela `contatos`
 --
 ALTER TABLE `contatos`
@@ -130,6 +159,12 @@ ALTER TABLE `usuarios`
 --
 -- AUTO_INCREMENT para tabelas despejadas
 --
+
+--
+-- AUTO_INCREMENT de tabela `avaliacoes`
+--
+ALTER TABLE `avaliacoes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `contatos`
