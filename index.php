@@ -1,23 +1,36 @@
 <?php
 session_start();
 
-include('conexao.php');
-
 /*
 |--------------------------------------------------------------------------
 | AVALIAÇÕES DE CLIENTES
 |--------------------------------------------------------------------------
+| A conexão com o banco é opcional aqui: se o banco de dados ainda não
+| estiver configurado (ou a tabela "avaliacoes" não existir), o site
+| continua funcionando normalmente e a seção de avaliações fica vazia
+| até que o banco seja configurado.
 */
 
-$result_avaliacoes = $conn->query("SELECT nome, nota, comentario, criado_em FROM avaliacoes ORDER BY id DESC LIMIT 6");
-
+$conn = null;
+$result_avaliacoes = false;
 $mediaAvaliacoes = 0;
 $totalAvaliacoes = 0;
 
-$result_media = $conn->query("SELECT AVG(nota) AS media, COUNT(*) AS total FROM avaliacoes");
-if ($result_media && $row_media = $result_media->fetch_assoc()) {
-    $mediaAvaliacoes = $row_media['media'] ? floatval($row_media['media']) : 0;
-    $totalAvaliacoes = intval($row_media['total']);
+try {
+    include('conexao.php');
+
+    $result_avaliacoes = $conn->query("SELECT nome, nota, comentario, criado_em FROM avaliacoes ORDER BY id DESC LIMIT 6");
+
+    $result_media = $conn->query("SELECT AVG(nota) AS media, COUNT(*) AS total FROM avaliacoes");
+    if ($result_media && $row_media = $result_media->fetch_assoc()) {
+        $mediaAvaliacoes = $row_media['media'] ? floatval($row_media['media']) : 0;
+        $totalAvaliacoes = intval($row_media['total']);
+    }
+} catch (\Throwable $e) {
+    // Banco indisponível ou tabela ainda não criada: segue sem quebrar a página.
+    $result_avaliacoes = false;
+    $mediaAvaliacoes = 0;
+    $totalAvaliacoes = 0;
 }
 
 /*
