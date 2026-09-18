@@ -411,17 +411,6 @@ body {
     padding-top: 26px;
 }
 
-.client-quote-mark {
-    position: absolute;
-    top: 14px;
-    right: 24px;
-    font-size: 64px;
-    line-height: 1;
-    font-family: Georgia, serif;
-    color: rgba(2, 132, 199, 0.15);
-    font-weight: 800;
-}
-
 .client-stars {
     color: #f59e0b;
     letter-spacing: 3px;
@@ -832,6 +821,154 @@ body {
 }
 
 
+/* =========================================================
+   SEÇÃO AVALIAÇÃO
+   ========================================================= */
+
+.rating-summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.rating-summary-number {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--text-dark);
+}
+
+.rating-summary-stars {
+    color: #f59e0b;
+    font-size: 24px;
+    letter-spacing: 2px;
+}
+
+.rating-summary-count {
+    color: var(--text-soft);
+    font-size: 14px;
+}
+
+.avaliacao-layout {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+.avaliacao-form-card h3 {
+    color: var(--text-dark);
+    font-size: 19px;
+    margin-bottom: 20px;
+}
+
+.avaliacao-form-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Seletor de estrelas sem precisar de JavaScript */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    gap: 4px;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 32px;
+    line-height: 1;
+    color: #d8dee8;
+    cursor: pointer;
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: #f59e0b;
+}
+
+.star-rating label:hover {
+    transform: scale(1.12);
+}
+
+.avaliacao-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.review-card {
+    display: flex;
+    gap: 16px;
+    background: white;
+    padding: 22px;
+    border-radius: var(--radius);
+    box-shadow: 0 6px 20px -14px rgba(15, 23, 42, 0.18);
+    border: 1px solid rgba(2, 132, 199, 0.06);
+}
+
+.review-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid rgba(2, 132, 199, 0.2);
+}
+
+.review-content { flex: 1; }
+
+.review-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+.review-header h4 {
+    color: var(--text-dark);
+    font-size: 15.5px;
+}
+
+.review-stars {
+    color: #f59e0b;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.review-content p {
+    color: var(--text-soft);
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.review-date {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.avaliacao-vazio {
+    color: var(--text-soft);
+    font-size: 14.5px;
+    text-align: center;
+    padding: 40px 20px;
+    background: white;
+    border-radius: var(--radius);
+    border: 1px dashed #dbe3ec;
+}
+
+
 /* ================= RESPONSIVE ================= */
 @media (max-width: 860px) {
     .main-nav { display: none; }
@@ -841,4 +978,6 @@ body {
 
     .auth-wrapper { grid-template-columns: 1fr; }
     .auth-brand-panel { display: none; }
+
+    .avaliacao-layout { grid-template-columns: 1fr; }
 }
