@@ -1,6 +1,25 @@
 <?php
 session_start();
 
+include('conexao.php');
+
+/*
+|--------------------------------------------------------------------------
+| AVALIAÇÕES DE CLIENTES
+|--------------------------------------------------------------------------
+*/
+
+$result_avaliacoes = $conn->query("SELECT nome, nota, comentario, criado_em FROM avaliacoes ORDER BY id DESC LIMIT 6");
+
+$mediaAvaliacoes = 0;
+$totalAvaliacoes = 0;
+
+$result_media = $conn->query("SELECT AVG(nota) AS media, COUNT(*) AS total FROM avaliacoes");
+if ($result_media && $row_media = $result_media->fetch_assoc()) {
+    $mediaAvaliacoes = $row_media['media'] ? floatval($row_media['media']) : 0;
+    $totalAvaliacoes = intval($row_media['total']);
+}
+
 /*
 |--------------------------------------------------------------------------
 | CONFIGURAÇÃO DA IMAGEM DO BANNER
@@ -156,12 +175,16 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
                     Home
                 </a>
 
+                <a href="#servicos">
+                    Serviços
+                </a>
+
                 <a href="#clientes">
                     Clientes
                 </a>
 
-                <a href="#servicos">
-                    Serviços
+                <a href="#avaliacao">
+                    Avaliação
                 </a>
 
                 <a href="contato.php" class="nav-cta">
@@ -293,12 +316,6 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
         <div class="container hero-content">
 
 
-            <span class="hero-tag">
-                <span class="pulse-dot"></span>
-                Revenda Autorizada Dell
-            </span>
-
-
             <h1>
 
                 Tecnologia e Suporte de
@@ -308,15 +325,6 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
                 </span>
 
             </h1>
-
-
-            <p>
-
-                Venda autorizada de notebooks Dell,
-                desktops corporativos e soluções completas
-                de infraestrutura e suporte em TI para o seu negócio.
-
-            </p>
 
 
             <div class="hero-buttons">
@@ -335,147 +343,6 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
                 >
                     Solicitar Orçamento
                 </a>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- ==========================================================
-         CLIENTES
-    =========================================================== -->
-
-    <section
-        id="clientes"
-        class="section-padding reveal"
-    >
-
-        <div class="container">
-
-
-            <span class="eyebrow">
-                Quem confia na gente
-            </span>
-
-
-            <h2 class="section-title">
-                Nossos Clientes
-            </h2>
-
-
-            <p class="section-subtitle">
-
-                Empresas que já contam com a AdaTech para
-                manter a operação de TI funcionando sem parar.
-
-            </p>
-
-
-            <div class="grid-layout">
-
-
-                <!-- ==================================================
-                     CLIENTE 1
-                =================================================== -->
-
-                <div class="card client-card">
-
-                    <span class="client-quote-mark">&ldquo;</span>
-
-                    <div class="client-stars">★★★★★</div>
-
-                    <p>
-                        Depoimento do cliente sobre o serviço
-                        prestado pela AdaTech.
-                    </p>
-
-                    <div class="client-profile">
-
-                        <img
-                            src="https://ui-avatars.com/api/?name=Carlos+Mendes&background=0284c7&color=fff&bold=true&size=128"
-                            alt="Foto de Carlos Mendes"
-                            class="client-avatar"
-                        >
-
-                        <div class="client-info">
-                            <h3>Carlos Mendes</h3>
-                            <span class="client-role">Diretor de TI &middot; Grupo Fortaleza</span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- ==================================================
-                     CLIENTE 2
-                =================================================== -->
-
-                <div class="card client-card">
-
-                    <span class="client-quote-mark">&ldquo;</span>
-
-                    <div class="client-stars">★★★★★</div>
-
-                    <p>
-                        Depoimento do cliente sobre o serviço
-                        prestado pela AdaTech.
-                    </p>
-
-                    <div class="client-profile">
-
-                        <img
-                            src="https://ui-avatars.com/api/?name=Marina+Souza&background=008b8b&color=fff&bold=true&size=128"
-                            alt="Foto de Marina Souza"
-                            class="client-avatar"
-                        >
-
-                        <div class="client-info">
-                            <h3>Marina Souza</h3>
-                            <span class="client-role">Gerente Administrativa &middot; Construtora Horizonte</span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- ==================================================
-                     CLIENTE 3
-                =================================================== -->
-
-                <div class="card client-card">
-
-                    <span class="client-quote-mark">&ldquo;</span>
-
-                    <div class="client-stars">★★★★★</div>
-
-                    <p>
-                        Depoimento do cliente sobre o serviço
-                        prestado pela AdaTech.
-                    </p>
-
-                    <div class="client-profile">
-
-                        <img
-                            src="https://ui-avatars.com/api/?name=Rafael+Lima&background=075985&color=fff&bold=true&size=128"
-                            alt="Foto de Rafael Lima"
-                            class="client-avatar"
-                        >
-
-                        <div class="client-info">
-                            <h3>Rafael Lima</h3>
-                            <span class="client-role">CEO &middot; TechStart Soluções</span>
-                        </div>
-
-                    </div>
-
-                </div>
 
             </div>
 
@@ -593,6 +460,297 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
                         impressoras e suporte ao usuário final.
 
                     </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==========================================================
+         CLIENTES
+    =========================================================== -->
+
+    <section
+        id="clientes"
+        class="section-padding reveal"
+    >
+
+        <div class="container">
+
+
+            <span class="eyebrow">
+                Quem confia na gente
+            </span>
+
+
+            <h2 class="section-title">
+                Nossos Clientes
+            </h2>
+
+
+            <p class="section-subtitle">
+
+                Empresas que já contam com a AdaTech para
+                manter a operação de TI funcionando sem parar.
+
+            </p>
+
+
+            <div class="grid-layout">
+
+
+                <!-- ==================================================
+                     CLIENTE 1
+                =================================================== -->
+
+                <div class="card client-card">
+
+                    <div class="client-stars">★★★★★</div>
+
+                    <p>
+                        Depoimento do cliente sobre o serviço
+                        prestado pela AdaTech.
+                    </p>
+
+                    <div class="client-profile">
+
+                        <img
+                            src="https://ui-avatars.com/api/?name=Carlos+Mendes&background=0284c7&color=fff&bold=true&size=128"
+                            alt="Foto de Carlos Mendes"
+                            class="client-avatar"
+                        >
+
+                        <div class="client-info">
+                            <h3>Carlos Mendes</h3>
+                            <span class="client-role">Diretor de TI &middot; Grupo Fortaleza</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ==================================================
+                     CLIENTE 2
+                =================================================== -->
+
+                <div class="card client-card">
+
+                    <div class="client-stars">★★★★★</div>
+
+                    <p>
+                        Depoimento do cliente sobre o serviço
+                        prestado pela AdaTech.
+                    </p>
+
+                    <div class="client-profile">
+
+                        <img
+                            src="https://ui-avatars.com/api/?name=Marina+Souza&background=008b8b&color=fff&bold=true&size=128"
+                            alt="Foto de Marina Souza"
+                            class="client-avatar"
+                        >
+
+                        <div class="client-info">
+                            <h3>Marina Souza</h3>
+                            <span class="client-role">Gerente Administrativa &middot; Construtora Horizonte</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ==================================================
+                     CLIENTE 3
+                =================================================== -->
+
+                <div class="card client-card">
+
+                    <div class="client-stars">★★★★★</div>
+
+                    <p>
+                        Depoimento do cliente sobre o serviço
+                        prestado pela AdaTech.
+                    </p>
+
+                    <div class="client-profile">
+
+                        <img
+                            src="https://ui-avatars.com/api/?name=Rafael+Lima&background=075985&color=fff&bold=true&size=128"
+                            alt="Foto de Rafael Lima"
+                            class="client-avatar"
+                        >
+
+                        <div class="client-info">
+                            <h3>Rafael Lima</h3>
+                            <span class="client-role">CEO &middot; TechStart Soluções</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==========================================================
+         AVALIAÇÃO
+    =========================================================== -->
+
+    <section
+        id="avaliacao"
+        class="section-bg section-padding reveal"
+    >
+
+        <div class="container">
+
+
+            <span class="eyebrow">
+                Sua opinião importa
+            </span>
+
+
+            <h2 class="section-title">
+                Avalie Nossos Serviços
+            </h2>
+
+
+            <p class="section-subtitle">
+
+                Já é cliente AdaTech? Conta pra gente como foi
+                sua experiência com o nosso atendimento.
+
+            </p>
+
+
+            <?php if ($totalAvaliacoes > 0): ?>
+
+                <div class="rating-summary">
+
+                    <span class="rating-summary-number">
+                        <?php echo number_format($mediaAvaliacoes, 1, ',', '.'); ?>
+                    </span>
+
+                    <div class="rating-summary-stars">
+                        <?php echo str_repeat('★', round($mediaAvaliacoes)) . str_repeat('☆', 5 - round($mediaAvaliacoes)); ?>
+                    </div>
+
+                    <span class="rating-summary-count">
+                        baseado em <?php echo $totalAvaliacoes; ?>
+                        <?php echo $totalAvaliacoes == 1 ? 'avaliação' : 'avaliações'; ?>
+                    </span>
+
+                </div>
+
+            <?php endif; ?>
+
+
+            <div class="avaliacao-layout">
+
+
+                <!-- ==================================================
+                     FORMULÁRIO DE AVALIAÇÃO
+                =================================================== -->
+
+                <div class="card avaliacao-form-card">
+
+                    <h3>Deixe sua avaliação</h3>
+
+                    <form method="POST" action="salvar_avaliacao.php">
+
+                        <div class="form-group">
+                            <label>Seu nome</label>
+                            <input type="text" name="nome" placeholder="Como podemos te chamar?" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Sua nota</label>
+
+                            <div class="star-rating">
+                                <input type="radio" id="nota5" name="nota" value="5" required><label for="nota5">★</label>
+                                <input type="radio" id="nota4" name="nota" value="4"><label for="nota4">★</label>
+                                <input type="radio" id="nota3" name="nota" value="3"><label for="nota3">★</label>
+                                <input type="radio" id="nota2" name="nota" value="2"><label for="nota2">★</label>
+                                <input type="radio" id="nota1" name="nota" value="1"><label for="nota1">★</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Comentário (opcional)</label>
+                            <textarea name="comentario" rows="3" placeholder="Conte como foi sua experiência"></textarea>
+                        </div>
+
+                        <button type="submit" class="auth-submit-btn">Enviar Avaliação</button>
+
+                    </form>
+
+                </div>
+
+
+                <!-- ==================================================
+                     LISTA DE AVALIAÇÕES
+                =================================================== -->
+
+                <div class="avaliacao-lista">
+
+                    <?php if ($result_avaliacoes && $result_avaliacoes->num_rows > 0): ?>
+
+                        <?php while ($avaliacao = $result_avaliacoes->fetch_assoc()): ?>
+
+                            <div class="review-card">
+
+                                <img
+                                    src="https://ui-avatars.com/api/?name=<?php echo urlencode($avaliacao['nome']); ?>&background=random&color=fff&bold=true&size=96"
+                                    alt="Foto de <?php echo htmlspecialchars($avaliacao['nome']); ?>"
+                                    class="review-avatar"
+                                >
+
+                                <div class="review-content">
+
+                                    <div class="review-header">
+
+                                        <h4><?php echo htmlspecialchars($avaliacao['nome']); ?></h4>
+
+                                        <span class="review-stars">
+                                            <?php echo str_repeat('★', $avaliacao['nota']) . str_repeat('☆', 5 - $avaliacao['nota']); ?>
+                                        </span>
+
+                                    </div>
+
+                                    <?php if (!empty($avaliacao['comentario'])): ?>
+                                        <p><?php echo nl2br(htmlspecialchars($avaliacao['comentario'])); ?></p>
+                                    <?php endif; ?>
+
+                                    <span class="review-date">
+                                        <?php echo date('d/m/Y', strtotime($avaliacao['criado_em'])); ?>
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        <?php endwhile; ?>
+
+                    <?php else: ?>
+
+                        <p class="avaliacao-vazio">
+                            Ainda não há avaliações. Seja o primeiro a avaliar a AdaTech!
+                        </p>
+
+                    <?php endif; ?>
 
                 </div>
 
