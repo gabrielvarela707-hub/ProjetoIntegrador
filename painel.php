@@ -16,6 +16,10 @@ $result_contatos = $conn->query($sql_contatos);
 
 $sql_usuarios = "SELECT id, nome, email, telefone, endereco, status, data_cadastro FROM usuarios ORDER BY id DESC";
 $result_usuarios = $conn->query($sql_usuarios);
+
+// Consulta para as Avaliações
+$sql_avaliacoes = "SELECT id, nome, nota, comentario, data_criacao FROM avaliacoes ORDER BY id DESC";
+$result_avaliacoes = $conn->query($sql_avaliacoes);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -117,6 +121,39 @@ $result_usuarios = $conn->query($sql_usuarios);
             </tbody>
         </table>
 
+        <!-- AVALIAÇÕES RECEBIDAS -->
+        <h3 style="color: #38bdf8; margin-top: 20px;">Avaliações Recebidas</h3>
+        <table style="width: 100%; border-collapse: collapse; text-align: left; background: #0f172a; border-radius: 6px; overflow: hidden; margin-bottom: 40px;">
+            <thead>
+                <tr style="background: #0284c7; color: white;">
+                    <th style="padding: 12px;">ID</th>
+                    <th style="padding: 12px;">Data</th>
+                    <th style="padding: 12px;">Nome</th>
+                    <th style="padding: 12px;">Nota</th>
+                    <th style="padding: 12px;">Comentário</th>
+                    <th style="padding: 12px; text-align: center;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if ($result_avaliacoes && $result_avaliacoes->num_rows > 0): ?>
+                    <?php while($av = $result_avaliacoes->fetch_assoc()): ?>
+                        <tr id="avaliacao-<?php echo $av['id']; ?>" style="border-bottom: 1px solid #334155;">
+                            <td style="padding: 12px;"><?php echo $av['id']; ?></td>
+                            <td style="padding: 12px;"><?php echo !empty($av['data_criacao']) ? date('d/m/Y H:i', strtotime($av['data_criacao'])) : '-'; ?></td>
+                            <td style="padding: 12px;"><?php echo htmlspecialchars($av['nome']); ?></td>
+                            <td style="padding: 12px;">⭐ <?php echo $av['nota']; ?> / 5</td>
+                            <td style="padding: 12px;"><?php echo htmlspecialchars($av['comentario']); ?></td>
+                            <td style="padding: 12px; text-align: center;">
+                                <button onclick="deletarAvaliacao(<?php echo $av['id']; ?>)" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Excluir</button>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <tr><td colspan="6" style="padding: 20px; text-align: center; color: #94a3b8;">Nenhuma avaliação encontrada.</td></tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+
         <!-- CONTAS CADASTRADAS -->
         <h3 style="color: #38bdf8; margin-top: 20px;">Contas Cadastradas (Administradores)</h3>
         <table style="width: 100%; border-collapse: collapse; text-align: left; background: #0f172a; border-radius: 6px; overflow: hidden;">
@@ -173,6 +210,12 @@ $result_usuarios = $conn->query($sql_usuarios);
         if (!confirm("Deseja deletar este contato?")) return;
         fetch('deletar_contato.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'id=' + encodeURIComponent(id) })
         .then(r => r.text()).then(data => { if (data.trim() === 'sucesso') document.getElementById('contato-' + id).remove(); });
+    }
+
+    function deletarAvaliacao(id) {
+        if (!confirm("Deseja deletar esta avaliação?")) return;
+        fetch('deletar_avaliacao.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'id=' + encodeURIComponent(id) })
+        .then(r => r.text()).then(data => { if (data.trim() === 'sucesso') document.getElementById('avaliacao-' + id).remove(); });
     }
 
     function deletarUsuario(id) {
