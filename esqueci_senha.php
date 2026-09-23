@@ -1,20 +1,66 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php';
 include('conexao.php');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
+$mensagem = "";
 
-    $sql = "SELECT id FROM usuarios WHERE email = ?";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = trim($_POST['email']);
+
+    // Verificar se o e-mail existe na base de dados
+    $sql = "SELECT id, nome FROM usuarios WHERE email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $resultado = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
-        header("Location: redefinir_senha.php?email=" . urlencode($email));
-        exit;
+    if ($resultado->num_rows > 0) {
+        $usuario = $resultado->fetch_assoc();
+        
+        // Gerar token seguro e validade de 1 hora
+        $token = bin2hex(random_bytes(32));
+        $validade = date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+        // Guardar token e validade na base de dados
+        $sql_update = "UPDATE usuarios SET token_recuperacao = ?, token_validade = ? WHERE email = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bind_param("sss", $token, $validade, $email);
+        $stmt_update->execute();
+
+        // Configuração do PHPMailer para envio real
+        $mail = new PHPMailer(true);
+
+        try {
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'teu_email@gmail.com'; // <--- SUBSTITUI PELO TEU E-MAIL DO GMAIL
+            $mail->Password   = 'TUA_SENHA_DE_APLICACAO'; // <--- SUBSTITUI PELA SENHA DE APLICAÇÃO DO GMAIL
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
+            $mail->CharSet    = 'UTF-8';
+
+            $mail->setFrom('teu_email@gmail.com', 'Suporte AdaTech');
+            $mail->addAddress($email, $usuario['nome']);
+
+            // Link dinâmico apontando para o teu servidor AWS / DuckDNS
+            $link_redefinicao = "http://adatech.duckdns.org/redefinir_senha.php?token=" . $token;
+
+            $mail->isHTML(true);
+            $mail->Subject = 'Recuperação de Senha - AdaTech';
+            $mail->Body    = "Olá, <b>{$usuario['nome']}</b>.<br><br>Recebemos um pedido para redefinir a sua senha no sistema AdaTech.<br>Clique no botão abaixo para criar uma nova senha:<br><br><a href='{$link_redefinicao}' style='background: #0284c7; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold;'>Redefinir Senha</a><br><br>Este link é válido por 1 hora.<br><br>Se não solicitou esta alteração, ignore esta mensagem.";
+
+            $mail->send();
+            $mensagem = "<div style='background: #dcfce7; color: #16a34a; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;'>E-mail de recuperação enviado com sucesso! Verifique a sua caixa de entrada.</div>";
+        } catch (Exception $e) {
+            $mensagem = "<div style='background: #fee2e2; color: #ef4444; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;'>Erro ao enviar o e-mail. Tente novamente mais tarde.</div>";
+        }
     } else {
-        $erro = "E-mail não encontrado no sistema.";
+        // Mensagem neutra por segurança para evitar enumeração de contas
+        $mensagem = "<div style='background: #dcfce7; color: #16a34a; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;'>Se o e-mail estiver registado, receberá as instruções em breve.</div>";
     }
 }
 ?>
@@ -28,23 +74,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body style="display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #0f172a; margin: 0; font-family: sans-serif;">
 
-    <div style="background: #ffffff; padding: 30px; border-radius: 8px; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
-        <h2 style="margin-top: 0; color: #0f172a; text-align: center;">Recuperar Senha</h2>
+    <div style="background: #1e293b; padding: 30px; border-radius: 8px; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); color: #ffffff;">
+        <h2 style="margin-top: 0; color: #38bdf8; text-align: center;">Recuperar Senha</h2>
+        <p style="color: #94a3b8; font-size: 14px; text-align: center; margin-bottom: 20px;">Digite seu E-mail Cadastrado</p>
         
-        <?php if(isset($erro)): ?>
-            <p style="color: red; text-align: center;"><?php echo $erro; ?></p>
-        <?php endif; ?>
+        <?php echo $mensagem; ?>
 
         <form method="POST" action="esqueci_senha.php" style="display: flex; flex-direction: column; gap: 15px;">
             <div>
-                <label style="display: block; margin-bottom: 5px; color: #333;">Digite seu E-mail Cadastrado</label>
-                <input type="email" name="email" placeholder="seu@email.com" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                <input type="email" name="email" placeholder="gabriel@gmail.com" required style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 4px; box-sizing: border-box;">
             </div>
-            <button type="submit" style="background: #0284c7; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Avançar</button>
+            
+            <button type="submit" style="background: #0284c7; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%;">Avançar</button>
         </form>
 
-        <p style="text-align: center; margin-top: 15px; font-size: 14px;">
-            <a href="login.php" style="color: #0284c7;">Voltar para o Login</a>
+        <p style="text-align: center; margin-top: 20px; font-size: 14px;">
+            <a href="login.php" style="color: #38bdf8; text-decoration: none;">&larr; Voltar para o Login</a>
         </p>
     </div>
 
