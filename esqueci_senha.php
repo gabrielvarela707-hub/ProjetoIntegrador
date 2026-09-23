@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $link_redefinicao = "http://adatech.duckdns.org/redefinir_senha.php?token=" . $token;
 
             // Configuração da API do Brevo (HTTP POST - Contorna bloqueio de portas da AWS)
-            $api_key = 'TUA_API_KEY_DO_BREVO_AQUI'; // <--- Colocas a chave da API aqui
+            $api_key = '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'; 
             
             $dados_email = [
                 'sender' => ['name' => 'Suporte AdaTech', 'email' => 'gabrielvarela707@gmail.com'],
@@ -50,12 +50,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $resposta = curl_exec($ch);
             $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
 
             if ($http_code == 201 || $http_code == 200) {
                 $mensagem = "<div style='background: #dcfce7; color: #16a34a; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;'>E-mail de recuperação enviado com sucesso! Verifique a sua caixa de entrada.</div>";
             } else {
-                $mensagem = "<div style='background: #fee2e2; color: #ef4444; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;'>Erro ao enviar o e-mail via API.</div>";
+                // Exibe o retorno exato do Brevo para diagnóstico
+                $mensagem = "<div style='background: #fee2e2; color: #ef4444; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;'>Erro ao enviar. Detalhe: " . htmlspecialchars($resposta) . "</div>";
             }
         } else {
             $mensagem = "<div style='background: #fee2e2; color: #ef4444; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;'>Erro no banco de dados.</div>";
@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
         <p style="text-align: center; margin-top: 20px; font-size: 14px;">
-            <a href="login.php" style="color: #38bdf8; text-decoration: none;">&larr; Voltar ao Login</a>
+            <a href="login.php" style="color: #38bdf8; text-decoration: none;">&larr; Voltar para o Login</a>
         </p>
     </div>
 
