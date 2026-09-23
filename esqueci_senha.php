@@ -1,8 +1,4 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require 'vendor/autoload.php';
 include('conexao.php');
 
 $mensagem = "";
@@ -28,38 +24,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql_update = "UPDATE usuarios SET token_recuperacao = ?, token_validade = ? WHERE email = ?";
         $stmt_update = $conn->prepare($sql_update);
         $stmt_update->bind_param("sss", $token, $validade, $email);
-        $stmt_update->execute();
-
-        // Configuração do PHPMailer para envio real
-        $mail = new PHPMailer(true);
-
-        try {
-            $mail->isSMTP();
-            $mail->Host       = 'smtp.gmail.com';
-            $mail->SMTPAuth   = true;
-            $mail->Username   = 'gabrielvarela707@gmail.com'; // <--- SUBSTITUI PELO TEU E-MAIL DO GMAIL
-            $mail->Password   = 'zkklekheoqwtqjfz*'; // <--- SUBSTITUI PELA SENHA DE APLICAÇÃO DO GMAIL
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port       = 587;
-            $mail->CharSet    = 'UTF-8';
-
-            $mail->setFrom('gabrielvarela707@gmail.com', 'Suporte AdaTech');
-            $mail->addAddress($email, $usuario['nome']);
-
-            // Link dinâmico apontando para o teu servidor AWS / DuckDNS
+        
+        if ($stmt_update->execute()) {
             $link_redefinicao = "http://adatech.duckdns.org/redefinir_senha.php?token=" . $token;
 
-            $mail->isHTML(true);
-            $mail->Subject = 'Recuperação de Senha - AdaTech';
-            $mail->Body    = "Olá, <b>{$usuario['nome']}</b>.<br><br>Recebemos um pedido para redefinir a sua senha no sistema AdaTech.<br>Clique no botão abaixo para criar uma nova senha:<br><br><a href='{$link_redefinicao}' style='background: #0284c7; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold;'>Redefinir Senha</a><br><br>Este link é válido por 1 hora.<br><br>Se não solicitou esta alteração, ignore esta mensagem.";
+            // Configuração da API do Brevo (HTTP POST - Contorna bloqueio de portas da AWS)
+            $api_key = 'TUA_API_KEY_DO_BREVO_AQUI'; // <--- Colocas a chave da API aqui
+            
+            $dados_email = [
+                'sender' => ['name' => 'Suporte AdaTech', 'email' => 'gabrielvarela707@gmail.com'],
+                'to' => [['email' => $email, 'name' => $usuario['nome']]],
+                'subject' => 'Recuperação de Senha - AdaTech',
+                'htmlContent' => "Olá, <b>{$usuario['nome']}</b>.<br><br>Recebemos um pedido para redefinir a sua senha no sistema AdaTech.<br>Clique no botão abaixo para criar uma nova senha:<br><br><a href='{$link_redefinicao}' style='background: #0284c7; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold;'>Redefinir Senha</a><br><br>Este link é válido por 1 hora.<br><br>Se não solicitou esta alteração, ignore esta mensagem."
+            ];
 
-            $mail->send();
-            $mensagem = "<div style='background: #dcfce7; color: #16a34a; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;'>E-mail de recuperação enviado com sucesso! Verifique a sua caixa de entrada.</div>";
-        } catch (Exception $e) {
-            $mensagem = "<div style='background: #fee2e2; color: #ef4444; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;'>Erro ao enviar o e-mail. Tente novamente mais tarde.</div>";
+            $ch = curl_init('https://api.brevo.com/v3/smtp/email');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'accept: application/json',
+                'api-key: ' . $api_key,
+                'content-type: application/json'
+            ]);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($dados_email));
+
+            $resposta = curl_exec($ch);
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($http_code == 201 || $http_code == 200) {
+                $mensagem = "<div style='background: #dcfce7; color: #16a34a; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;'>E-mail de recuperação enviado com sucesso! Verifique a sua caixa de entrada.</div>";
+            } else {
+                $mensagem = "<div style='background: #fee2e2; color: #ef4444; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;'>Erro ao enviar o e-mail via API.</div>";
+            }
+        } else {
+            $mensagem = "<div style='background: #fee2e2; color: #ef4444; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;'>Erro no banco de dados.</div>";
         }
     } else {
-        // Mensagem neutra por segurança para evitar enumeração de contas
         $mensagem = "<div style='background: #dcfce7; color: #16a34a; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;'>Se o e-mail estiver registado, receberá as instruções em breve.</div>";
     }
 }
@@ -89,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
         <p style="text-align: center; margin-top: 20px; font-size: 14px;">
-            <a href="login.php" style="color: #38bdf8; text-decoration: none;">&larr; Voltar para o Login</a>
+            <a href="login.php" style="color: #38bdf8; text-decoration: none;">&larr; Voltar ao Login</a>
         </p>
     </div>
 
