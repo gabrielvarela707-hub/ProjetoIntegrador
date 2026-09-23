@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $link_redefinicao = "http://adatech.duckdns.org/redefinir_senha.php?token=" . $token;
 
             // Configuração da API do Brevo (HTTP POST - Contorna bloqueio de portas da AWS)
-            $api_key = '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'; 
+            $api_key = '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'; 
             
             $dados_email = [
                 'sender' => ['name' => 'Suporte AdaTech', 'email' => 'gabrielvarela707@gmail.com'],
