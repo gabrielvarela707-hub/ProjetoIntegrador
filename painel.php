@@ -26,7 +26,7 @@ $result_avaliacoes = $conn->query($sql_avaliacoes);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel CRM - AdaTech</title>
+    <title>Painel - AdaTech</title>
     <link rel="stylesheet" href="adatech.css">
     <style>
         body {
@@ -155,7 +155,7 @@ $result_avaliacoes = $conn->query($sql_avaliacoes);
         <main class="crm-main">
             <!-- CABEÇALHO -->
             <div class="crm-header">
-                <h2 style="margin: 0; color: #38bdf8;">Painel de Controle - CRM</h2>
+                <h2 style="margin: 0; color: #38bdf8;">Painel de Controle /h2>
                 <span style="color: #94a3b8; font-weight: bold;">Sessão Ativa</span>
             </div>
 
