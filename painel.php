@@ -73,8 +73,9 @@ $result_avaliacoes = $conn->query($sql_avaliacoes);
             transition: all 0.3s;
             border-left: 4px solid transparent;
             font-weight: 600;
+            cursor: pointer;
         }
-        .crm-nav li a:hover {
+        .crm-nav li a:hover, .crm-nav li a.active {
             background-color: #334155;
             color: #f8fafc;
             border-left-color: #38bdf8;
@@ -104,6 +105,10 @@ $result_avaliacoes = $conn->query($sql_avaliacoes);
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             margin-bottom: 40px;
+            display: none; /* Oculto por padrão */
+        }
+        .section-card.active {
+            display: block; /* Mostra apenas a ativa */
         }
         .crm-table {
             width: 100%;
@@ -135,10 +140,10 @@ $result_avaliacoes = $conn->query($sql_avaliacoes);
         <aside class="crm-sidebar">
             <a href="painel.php" class="crm-brand">Ada<span>Tech</span></a>
             <ul class="crm-nav">
-                <li><a href="#orcamentos">Orçamentos Recebidos</a></li>
-                <li><a href="#contatos">Contatos Cadastrados</a></li>
-                <li><a href="#avaliacoes">Avaliações Recebidas</a></li>
-                <li><a href="#usuarios">Contas (Administradores)</a></li>
+                <li><a onclick="mudarSecao('orcamentos', this)" class="active" id="nav-orcamentos">Orçamentos Recebidos</a></li>
+                <li><a onclick="mudarSecao('contatos', this)" id="nav-contatos">Contatos Cadastrados</a></li>
+                <li><a onclick="mudarSecao('avaliacoes', this)" id="nav-avaliacoes">Avaliações Recebidas</a></li>
+                <li><a onclick="mudarSecao('usuarios', this)" id="nav-usuarios">Contas (Administradores)</a></li>
             </ul>
             <div class="crm-sidebar-footer">
                 <a href="index.php" style="color: #94a3b8; text-decoration: none; display: block; margin-bottom: 12px; font-weight: bold;">&larr; Ver Site</a>
@@ -155,7 +160,7 @@ $result_avaliacoes = $conn->query($sql_avaliacoes);
             </div>
 
             <!-- ORÇAMENTOS -->
-            <div id="orcamentos" class="section-card">
+            <div id="orcamentos" class="section-card active">
                 <h3 style="color: #38bdf8; margin-top: 0; margin-bottom: 20px;">Orçamentos Recebidos</h3>
                 <table class="crm-table">
                     <thead>
@@ -318,8 +323,22 @@ $result_avaliacoes = $conn->query($sql_avaliacoes);
         </main>
     </div>
 
-    <!-- SCRIPTS DE EXCLUSÃO VIA AJAX -->
+    <!-- SCRIPTS DE NAVEGAÇÃO E EXCLUSÃO VIA AJAX -->
     <script>
+    function mudarSecao(secaoId, elemento) {
+        // Ocultar todos os cards
+        const cards = document.querySelectorAll('.section-card');
+        cards.forEach(card => card.classList.remove('active'));
+
+        // Mostrar apenas o selecionado
+        document.getElementById(secaoId).classList.add('active');
+
+        // Atualizar classe ativa no menu lateral
+        const links = document.querySelectorAll('.crm-nav a');
+        links.forEach(link => link.classList.remove('active'));
+        elemento.classList.add('active');
+    }
+
     function deletar(id) {
         if (!confirm("Deseja deletar este orçamento?")) return;
         fetch('deletar.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'id=' + encodeURIComponent(id) })
