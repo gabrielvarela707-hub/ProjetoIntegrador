@@ -37,13 +37,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->isSMTP();
             $mail->Host       = 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'teu_email@gmail.com'; // <--- SUBSTITUI PELO TEU E-MAIL DO GMAIL
-            $mail->Password   = 'TUA_SENHA_DE_APLICACAO'; // <--- SUBSTITUI PELA SENHA DE APLICAÇÃO DO GMAIL
+            $mail->Username   = 'gabrielvarela707@gmail'; // <--- SUBSTITUI PELO TEU E-MAIL DO GMAIL
+            $mail->Password   = 'zkklekheoqwtqjfz*'; // <--- SUBSTITUI PELA SENHA DE APLICAÇÃO DO GMAIL
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = 587;
             $mail->CharSet    = 'UTF-8';
 
-            $mail->setFrom('teu_email@gmail.com', 'Suporte AdaTech');
+            $mail->setFrom('gabrielvarela707@gmail.com', 'Suporte AdaTech');
             $mail->addAddress($email, $usuario['nome']);
 
             // Link dinâmico apontando para o teu servidor AWS / DuckDNS
