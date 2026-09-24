@@ -192,6 +192,10 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
                     Serviços
                 </a>
 
+                <a href="#produtos">
+                    Produtos
+                </a>
+
                 <a href="#clientes">
                     Clientes
                 </a>
@@ -208,6 +212,49 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
 
 
             <div class="nav-actions">
+
+
+                <!-- ==================================================
+                     CARRINHO (atalho visual para Produtos)
+                =================================================== -->
+
+                <a
+                    href="#produtos"
+                    class="cart-icon-container"
+                    aria-label="Ver produtos"
+                >
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+
+                        <circle
+                            cx="9"
+                            cy="21"
+                            r="1"
+                        ></circle>
+
+                        <circle
+                            cx="20"
+                            cy="21"
+                            r="1"
+                        ></circle>
+
+                        <path
+                            d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                        ></path>
+
+                    </svg>
+
+                </a>
 
 
                 <!-- ==================================================
@@ -473,6 +520,159 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
                         impressoras e suporte ao usuário final.
 
                     </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==========================================================
+         PRODUTOS
+    =========================================================== -->
+
+    <section
+        id="produtos"
+        class="section-padding reveal"
+    >
+
+        <div class="container">
+
+
+            <span class="eyebrow">
+                Equipamentos
+            </span>
+
+
+            <h2 class="section-title">
+                Nossos Produtos
+            </h2>
+
+
+            <p class="section-subtitle">
+
+                Além do suporte técnico, fornecemos equipamentos
+                de qualidade com garantia para sua empresa.
+
+            </p>
+
+
+            <div class="grid-layout">
+
+
+                <!-- ==================================================
+                     PRODUTO 1 - NOTEBOOK
+                =================================================== -->
+
+                <div class="card product-card">
+
+                    <img
+                        src="produto-notebook.webp"
+                        alt="Notebook Dell Vostro 15"
+                        class="product-image"
+                    >
+
+                    <div class="product-badge">
+                        Notebook
+                    </div>
+
+                    <h3>
+                        Notebook Dell Vostro 15
+                    </h3>
+
+                    <p>
+
+                        Intel Core i5, 8GB RAM, SSD 256GB.
+                        Ideal para produtividade no dia a dia da sua empresa.
+
+                    </p>
+
+                    <a
+                        href="contato.php"
+                        class="btn-secondary"
+                    >
+                        Comprar
+                    </a>
+
+                </div>
+
+
+
+                <!-- ==================================================
+                     PRODUTO 2 - DESKTOP
+                =================================================== -->
+
+                <div class="card product-card">
+
+                    <img
+                        src="https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/desktops/vostro-desktops/vostro-3910-tower/media-gallery/black-nomcr/desktop-dv3910-black-gallery-3.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=255&qlt=100,1&resMode=sharp2&size=255,402&chrss=full"
+                        alt="Desktop Dell Vostro 3910"
+                        class="product-image"
+                    >
+
+                    <div class="product-badge">
+                        Desktop
+                    </div>
+
+                    <h3>
+                        Desktop Dell Vostro 3910
+                    </h3>
+
+                    <p>
+
+                        Intel Core i5, 8GB RAM, SSD 512GB.
+                        Desempenho robusto para o dia a dia da empresa.
+
+                    </p>
+
+                    <a
+                        href="contato.php"
+                        class="btn-secondary"
+                    >
+                        Comprar
+                    </a>
+
+                </div>
+
+
+
+                <!-- ==================================================
+                     PRODUTO 3 - ALL-IN-ONE
+                =================================================== -->
+
+                <div class="card product-card">
+
+                    <img
+                        src="https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/desktops/optiplex-desktops/optiplex-d13-aio/media-gallery-standard/aio-desktop-optiplex-7410-km5221w-black-gallery-4.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=495&qlt=100,1&resMode=sharp2&size=495,402&chrss=full"
+                        alt="All-in-One Dell OptiPlex"
+                        class="product-image"
+                    >
+
+                    <div class="product-badge">
+                        All-in-One
+                    </div>
+
+                    <h3>
+                        All-in-One Dell OptiPlex
+                    </h3>
+
+                    <p>
+
+                        Intel Core i5, 8GB RAM, SSD 256GB, tela FHD integrada.
+                        Economiza espaço sem perder desempenho.
+
+                    </p>
+
+                    <a
+                        href="contato.php"
+                        class="btn-secondary"
+                    >
+                        Comprar
+                    </a>
 
                 </div>
 
