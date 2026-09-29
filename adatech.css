@@ -109,6 +109,19 @@ body {
     gap: 16px;
 }
 
+.cart-icon-container {
+    cursor: pointer;
+    position: relative;
+    color: var(--text-muted);
+    display: flex;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.cart-icon-container:hover {
+    color: var(--blue);
+    transform: translateY(-2px);
+}
+
 .user-greeting {
     color: var(--text-dark);
     font-weight: 700;
@@ -372,6 +385,7 @@ body {
     box-shadow: 0 6px 20px -10px rgba(15, 23, 42, 0.12);
     border: 1px solid rgba(2, 132, 199, 0.08);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
 }
 
 .card:hover {
@@ -380,6 +394,17 @@ body {
 }
 
 .product-card, .client-card { position: relative; }
+
+.product-image {
+    display: block;
+    width: calc(100% + 64px);
+    height: 170px;
+    object-fit: contain;
+    object-position: center;
+    background: #f8fafc;
+    margin: -32px -32px 18px -32px;
+    padding: 16px;
+}
 
 .product-badge, .client-badge {
     display: inline-block;

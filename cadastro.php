@@ -22,18 +22,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sssssss", $nome, $email, $senha_hash, $telefone, $cpf, $data_nascimento, $genero);
 
-        try {
-            if ($stmt->execute()) {
-                header("Location: login.php?msg=sucesso");
-                exit;
-            }
-        } catch (mysqli_sql_exception $e) {
-            // Código 1062 refere-se a entrada duplicada (Duplicate entry) no MySQL
-            if ($e->getCode() == 1062) {
-                $erro = "Este e-mail já está registado! Tente outro ou faça login.";
-            } else {
-                $erro = "Erro ao cadastrar: " . $e->getMessage();
-            }
+        if ($stmt->execute()) {
+            header("Location: login.php?msg=sucesso");
+            exit;
+        } else {
+            $erro = "Erro ao cadastrar: " . $conn->error;
         }
     }
 }
