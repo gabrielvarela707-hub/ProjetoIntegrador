@@ -438,19 +438,50 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
             <div class="grid-layout">
 
                 <!-- PRODUTO 1 -->
-                <div class="card product-card">
-                    <img src="produto-notebook.webp" alt="Notebook Dell Vostro 15" class="product-img" style="width:100%; height:200px; object-fit:contain;">
-                    <span class="badge">Notebook</span>
-                    <h3>Notebook Dell Vostro 15</h3>
-                    <p>Intel Core i5, 8GB RAM, SSD 256GB. Ideal para produtividade no dia a dia da sua empresa.</p>
-                    <p class="product-price">R$ 3.899,00</p>
-                    <form action="pagamento.php" method="POST">
-                        <input type="hidden" name="produto" value="Notebook Dell Vostro 15">
-                        <input type="hidden" name="valor" value="3899.00">
-                        <button type="submit" class="btn-primary btn-block">Comprar</button>
-                    </form>
-                </div>
+<!-- PRODUTO 1 -->
+<div class="card product-card">
+    <img src="produto-notebook.webp" alt="Notebook Dell Vostro 15" class="product-img" style="width:100%; height:200px; object-fit:contain;">
+    <span class="badge">Notebook</span>
+    <h3>Notebook Dell Vostro 15</h3>
+    <p>Intel Core i5, 8GB RAM, SSD 256GB. Ideal para produtividade no dia a dia da sua empresa.</p>
+    <p class="product-price">R$ 3.899,00</p>
+    <form action="adicionar_carrinho.php" method="POST">
+        <input type="hidden" name="id" value="1">
+        <input type="hidden" name="produto" value="Notebook Dell Vostro 15">
+        <input type="hidden" name="valor" value="3899.00">
+        <button type="submit" class="btn-primary btn-block">Adicionar ao Carrinho</button>
+    </form>
+</div>
 
+<!-- PRODUTO 2 -->
+<div class="card product-card">
+    <img src="produto-desktop.webp" alt="Desktop Dell Vostro 3910" class="product-img" style="width:100%; height:200px; object-fit:contain;">
+    <span class="badge">Desktop</span>
+    <h3>Desktop Dell Vostro 3910</h3>
+    <p>Intel Core i5, 8GB RAM, SSD 512GB. Desempenho robusto para o dia a dia da sua empresa.</p>
+    <p class="product-price">R$ 4.299,00</p>
+    <form action="adicionar_carrinho.php" method="POST">
+        <input type="hidden" name="id" value="2">
+        <input type="hidden" name="produto" value="Desktop Dell Vostro 3910">
+        <input type="hidden" name="valor" value="4299.00">
+        <button type="submit" class="btn-primary btn-block">Adicionar ao Carrinho</button>
+    </form>
+</div>
+
+<!-- PRODUTO 3 -->
+<div class="card product-card">
+    <img src="produto-allinone.webp" alt="All-in-One Dell OptiPlex" class="product-img" style="width:100%; height:200px; object-fit:contain;">
+    <span class="badge">All-in-One</span>
+    <h3>All-in-One Dell OptiPlex</h3>
+    <p>Intel Core i5, 8GB RAM, SSD 256GB, tela FHD integrada. Economiza espaço sem perder desempenho.</p>
+    <p class="product-price">R$ 4.899,00</p>
+    <form action="adicionar_carrinho.php" method="POST">
+        <input type="hidden" name="id" value="3">
+        <input type="hidden" name="produto" value="All-in-One Dell OptiPlex">
+        <input type="hidden" name="valor" value="4899.00">
+        <button type="submit" class="btn-primary btn-block">Adicionar ao Carrinho</button>
+    </form>
+</div>
                 <!-- PRODUTO 2 -->
                 <div class="card product-card">
                     <img src="produto-desktop.webp" alt="Desktop Dell Vostro 3910" class="product-img" style="width:100%; height:200px; object-fit:contain;">

@@ -1,0 +1,30 @@
+<?php
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = $_POST['id'] ?? '';
+    $produto = $_POST['produto'] ?? '';
+    $valor = floatval($_POST['valor'] ?? 0);
+
+    if (!empty($id)) {
+        // Inicializa o carrinho na sessão se ainda não existir
+        if (!isset($_SESSION['carrinho'])) {
+            $_SESSION['carrinho'] = [];
+        }
+
+        // Se o produto já estiver no carrinho, aumenta a quantidade, senão adiciona novo
+        if (isset($_SESSION['carrinho'][$id])) {
+            $_SESSION['carrinho'][$id]['quantidade'] += 1;
+        } else {
+            $_SESSION['carrinho'][$id] = [
+                'produto' => $produto,
+                'valor' => $valor,
+                'quantidade' => 1
+            ];
+        }
+    }
+}
+
+// Redireciona de volta para a loja (ou para uma página de carrinho se tiveres)
+header('Location: index.php#produtos');
+exit;
