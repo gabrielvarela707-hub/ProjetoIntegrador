@@ -1,5 +1,12 @@
 <?php
-include('conexao.php');
+// A conexão com o banco não é usada nesta página (o pagamento não depende
+// de nenhuma tabela), então ela é opcional: se o banco não estiver
+// configurado neste ambiente, a página de pagamento continua funcionando normalmente.
+try {
+    include('conexao.php');
+} catch (\Throwable $e) {
+    $conn = null;
+}
 
 $access_token = "APP_USR-1354507277436164-080615-d1f8e0bd13d944ab3e0369936d7ed627-3596816680"; 
 
