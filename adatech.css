@@ -406,6 +406,32 @@ body {
     padding: 16px;
 }
 
+/* Wrapper usado quando a foto vem de um link externo e precisa de
+   um ícone de reserva caso a imagem não carregue (ver onerror no HTML) */
+.product-image-wrap {
+    position: relative;
+    width: calc(100% + 64px);
+    height: 170px;
+    margin: -32px -32px 18px -32px;
+    background: #f8fafc;
+}
+
+.product-image-wrap .product-image {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.product-image-fallback {
+    display: none;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    background: #f8fafc;
+}
+
 .product-badge, .client-badge {
     display: inline-block;
     background: linear-gradient(120deg, var(--blue), var(--teal));
@@ -484,8 +510,13 @@ body {
     padding: 10px 20px;
     border-radius: 999px;
     border: 2px solid var(--blue);
+    background: white;
+    font-family: inherit;
+    cursor: pointer;
     transition: all 0.2s ease;
 }
+
+.product-buy-form { margin: 0; }
 
 .btn-secondary:hover {
     background: var(--blue);
