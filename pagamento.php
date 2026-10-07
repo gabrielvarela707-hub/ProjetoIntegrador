@@ -10,19 +10,31 @@ try {
 
 $access_token = "APP_USR-1354507277436164-080615-d1f8e0bd13d944ab3e0369936d7ed627-3596816680"; 
 
-// Pega o valor e o nome do produto enviados pelo carrinho (se não vier nada, assume os valores padrão)
-$valor = isset($_POST['valor']) ? floatval(str_replace(',', '.', $_POST['valor'])) : 3899.00;
-$produto = isset($_POST['produto']) ? $_POST['produto'] : "Carrinho Ada Tech";
+// O pedido agora vem do carrinho (guardado na sessão). Preços vêm do catálogo no servidor.
+require_once 'catalogo.php';
+session_start();
+
+$itensPedido = [];
+$valor = 0;
+foreach (($_SESSION['carrinho'] ?? []) as $id => $qtd) {
+    if (!isset($CATALOGO[$id])) continue;
+    $itensPedido[] = [
+        "title"      => $CATALOGO[$id]['nome'],
+        "quantity"   => (int) $qtd,
+        "unit_price" => (float) $CATALOGO[$id]['valor']
+    ];
+    $valor += $CATALOGO[$id]['valor'] * $qtd;
+}
+
+// Sem itens no carrinho não há o que pagar: volta para o carrinho.
+if (empty($itensPedido)) {
+    header("Location: carrinho.php");
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gerar_pagamento'])) {
     $preferenceData = [
-        "items" => [
-            [
-                "title" => $produto,
-                "quantity" => 1,
-                "unit_price" => $valor
-            ]
-        ],
+        "items" => $itensPedido,
         "back_urls" => [
             "success" => "http://localhost/gabriel/Projeto/index.php",
             "failure" => "http://localhost/gabriel/Projeto/index.php",
@@ -76,17 +88,17 @@ $response = curl_exec($ch);
         <?php endif; ?>
 
         <form method="POST">
-            <p style="font-size: 18px; font-weight: bold; margin-bottom: 5px;"><?php echo htmlspecialchars($produto); ?></p>
+            <?php foreach ($itensPedido as $it): ?>
+                <p style="font-size: 16px; font-weight: bold; margin-bottom: 5px;"><?php echo (int) $it['quantity']; ?>x <?php echo htmlspecialchars($it['title']); ?></p>
+            <?php endforeach; ?>
             <p style="font-size: 20px; font-weight: bold; color: #008b8b; margin-bottom: 20px;">Total: R$ <?php echo number_format($valor, 2, ',', '.'); ?></p>
             
-            <input type="hidden" name="valor" value="<?php echo $valor; ?>">
-            <input type="hidden" name="produto" value="<?php echo htmlspecialchars($produto); ?>">
             <input type="hidden" name="gerar_pagamento" value="1">
 
             <button type="submit" style="background: #008b8b; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px;">Pagar com Mercado Pago</button>
         </form>
 
-        <a href="index.php" style="display: block; margin-top: 15px; color: #64748b; text-decoration: none; font-size: 14px;">← Voltar para o site AdaTech</a>
+        <a href="carrinho.php" style="display: block; margin-top: 15px; color: #64748b; text-decoration: none; font-size: 14px;">← Voltar para o carrinho</a>
     </div>
 </body>
 </html>
