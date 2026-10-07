@@ -1,6 +1,17 @@
 <?php
 session_start();
 
+$carrinhoAviso = '';
+if (!empty($_SESSION['carrinho_aviso'])) {
+    $carrinhoAviso = $_SESSION['carrinho_aviso'];
+    unset($_SESSION['carrinho_aviso']);
+}
+
+$qtdCarrinho = 0;
+if (!empty($_SESSION['carrinho']) && is_array($_SESSION['carrinho'])) {
+    $qtdCarrinho = array_sum($_SESSION['carrinho']);
+}
+
 /*
 |--------------------------------------------------------------------------
 | AVALIAÇÕES DE CLIENTES
@@ -215,13 +226,13 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
 
 
                 <!-- ==================================================
-                     CARRINHO (atalho visual para Produtos)
+                     CARRINHO (abre a página do carrinho)
                 =================================================== -->
 
                 <a
-                    href="#produtos"
+                    href="carrinho.php"
                     class="cart-icon-container"
-                    aria-label="Ver produtos"
+                    aria-label="Abrir carrinho"
                 >
 
                     <svg
@@ -253,6 +264,10 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
                         ></path>
 
                     </svg>
+
+                    <?php if ($qtdCarrinho > 0): ?>
+                        <span class="cart-badge"><?php echo (int) $qtdCarrinho; ?></span>
+                    <?php endif; ?>
 
                 </a>
 
@@ -571,7 +586,7 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
                 <div class="card product-card">
 
                     <img
-                        src="produto-notebook.webp"
+                        src="produto-notebook.png"
                         alt="Notebook Dell Vostro 15"
                         class="product-image"
                     >
@@ -591,19 +606,36 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
 
                     </p>
 
+                    <div class="product-actions">
+
                     <form
                         method="POST"
-                        action="pagamento.php"
+                        action="carrinho.php"
                         class="product-buy-form"
                     >
-                        <input type="hidden" name="produto" value="Notebook Dell Vostro 15">
-                        <input type="hidden" name="valor" value="3899.00">
-                        <input type="hidden" name="gerar_pagamento" value="1">
+                        <input type="hidden" name="acao" value="adicionar">
+                        <input type="hidden" name="id" value="notebook">
 
                         <button type="submit" class="btn-secondary">
                             Comprar
                         </button>
                     </form>
+
+                    <form
+                        method="POST"
+                        action="carrinho.php"
+                        class="product-buy-form"
+                    >
+                        <input type="hidden" name="acao" value="adicionar">
+                        <input type="hidden" name="id" value="notebook">
+                        <input type="hidden" name="retorno" value="produtos">
+
+                        <button type="submit" class="btn-add-cart">
+                            Adicionar ao carrinho
+                        </button>
+                    </form>
+
+                    </div>
 
                 </div>
 
@@ -645,19 +677,36 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
 
                     </p>
 
+                    <div class="product-actions">
+
                     <form
                         method="POST"
-                        action="pagamento.php"
+                        action="carrinho.php"
                         class="product-buy-form"
                     >
-                        <input type="hidden" name="produto" value="Desktop Dell Vostro 3910">
-                        <input type="hidden" name="valor" value="4299.00">
-                        <input type="hidden" name="gerar_pagamento" value="1">
+                        <input type="hidden" name="acao" value="adicionar">
+                        <input type="hidden" name="id" value="desktop">
 
                         <button type="submit" class="btn-secondary">
                             Comprar
                         </button>
                     </form>
+
+                    <form
+                        method="POST"
+                        action="carrinho.php"
+                        class="product-buy-form"
+                    >
+                        <input type="hidden" name="acao" value="adicionar">
+                        <input type="hidden" name="id" value="desktop">
+                        <input type="hidden" name="retorno" value="produtos">
+
+                        <button type="submit" class="btn-add-cart">
+                            Adicionar ao carrinho
+                        </button>
+                    </form>
+
+                    </div>
 
                 </div>
 
@@ -699,19 +748,36 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
 
                     </p>
 
+                    <div class="product-actions">
+
                     <form
                         method="POST"
-                        action="pagamento.php"
+                        action="carrinho.php"
                         class="product-buy-form"
                     >
-                        <input type="hidden" name="produto" value="All-in-One Dell OptiPlex">
-                        <input type="hidden" name="valor" value="4899.00">
-                        <input type="hidden" name="gerar_pagamento" value="1">
+                        <input type="hidden" name="acao" value="adicionar">
+                        <input type="hidden" name="id" value="allinone">
 
                         <button type="submit" class="btn-secondary">
                             Comprar
                         </button>
                     </form>
+
+                    <form
+                        method="POST"
+                        action="carrinho.php"
+                        class="product-buy-form"
+                    >
+                        <input type="hidden" name="acao" value="adicionar">
+                        <input type="hidden" name="id" value="allinone">
+                        <input type="hidden" name="retorno" value="produtos">
+
+                        <button type="submit" class="btn-add-cart">
+                            Adicionar ao carrinho
+                        </button>
+                    </form>
+
+                    </div>
 
                 </div>
 
@@ -1219,6 +1285,11 @@ $heroImageExists = file_exists(__DIR__ . '/' . $heroImage);
     <!-- ==========================================================
          JAVASCRIPT
     =========================================================== -->
+
+    <?php if ($carrinhoAviso): ?>
+        <div class="cart-toast" id="cartToast">✓ <?php echo htmlspecialchars($carrinhoAviso); ?> — <a href="carrinho.php">Ver carrinho</a></div>
+        <script>setTimeout(function(){var t=document.getElementById('cartToast'); if(t){t.classList.add('hide');}}, 3500);</script>
+    <?php endif; ?>
 
     <script src="adatech.js"></script>
 
