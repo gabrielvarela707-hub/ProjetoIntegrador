@@ -32,6 +32,24 @@ if (empty($itensPedido)) {
     exit;
 }
 
+// FRETE: o cliente precisa ter calculado e escolhido o frete no carrinho.
+// O valor é recalculado aqui no servidor (o navegador não consegue alterar).
+require_once 'frete_lib.php';
+$freteSel = frete_selecionado();
+if (!$freteSel) {
+    header("Location: carrinho.php?falta_frete=1");
+    exit;
+}
+$subtotalProdutos = $valor;
+if ($freteSel['valor'] > 0) {
+    $itensPedido[] = [
+        "title"      => "Frete - " . $freteSel['nome'] . " (CEP " . $freteSel['cep'] . ")",
+        "quantity"   => 1,
+        "unit_price" => (float) $freteSel['valor']
+    ];
+}
+$valor = $subtotalProdutos + $freteSel['valor'];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gerar_pagamento'])) {
     $preferenceData = [
         "items" => $itensPedido,
@@ -89,8 +107,24 @@ $response = curl_exec($ch);
 
         <form method="POST">
             <?php foreach ($itensPedido as $it): ?>
+                <?php if (strpos($it['title'], 'Frete - ') === 0) continue; ?>
                 <p style="font-size: 16px; font-weight: bold; margin-bottom: 5px;"><?php echo (int) $it['quantity']; ?>x <?php echo htmlspecialchars($it['title']); ?></p>
             <?php endforeach; ?>
+
+            <div style="border-top: 1px solid #e2e8f0; margin: 14px 0; padding-top: 12px; text-align: left; font-size: 14px; color: #475569;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span>Subtotal</span>
+                    <span>R$ <?php echo number_format($subtotalProdutos, 2, ',', '.'); ?></span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span>Frete - <?php echo htmlspecialchars($freteSel['nome']); ?></span>
+                    <span><?php echo $freteSel['valor'] > 0 ? 'R$ ' . number_format($freteSel['valor'], 2, ',', '.') : 'Grátis'; ?></span>
+                </div>
+                <div style="font-size: 12px; color: #64748b;">
+                    CEP <?php echo htmlspecialchars($freteSel['cep']); ?> · chega até <?php echo htmlspecialchars($freteSel['entrega_ate']); ?>
+                    · <a href="carrinho.php" style="color: #0284c7; text-decoration: none; font-weight: bold;">alterar</a>
+                </div>
+            </div>
             <p style="font-size: 20px; font-weight: bold; color: #008b8b; margin-bottom: 20px;">Total: R$ <?php echo number_format($valor, 2, ',', '.'); ?></p>
             
             <input type="hidden" name="gerar_pagamento" value="1">
